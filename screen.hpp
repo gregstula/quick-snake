@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <unordered_map>
 
 struct Screen {
 	Screen() {
@@ -6,7 +7,9 @@ struct Screen {
 		raw();
 		noecho();
 		keypad(stdscr, TRUE);
-		_active = true;
+		if(has_colors()) {
+			start_color();
+		}
 	}
 
 	~Screen() {
@@ -30,8 +33,6 @@ struct Screen {
 	}
 
 private:
-	bool _active;
-
-public:
-
+	bool _active = true;
 };
+
