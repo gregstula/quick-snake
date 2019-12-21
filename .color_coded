@@ -1,0 +1,4 @@
+-x
+c++
+-Wall
+-Werror
