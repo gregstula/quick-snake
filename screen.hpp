@@ -1,7 +1,8 @@
 #include <ncurses.h>
 #include <unordered_map>
 
-struct Screen {
+class Screen {
+public:
 	Screen() {
 		initscr();
 		raw();
@@ -20,6 +21,19 @@ struct Screen {
 		return getch();
 	}
 
+	template <typename S = std::string>
+	void print_at_coords(int y, int x, S&& str) {
+		mvprintw(y, x, str.c_str());
+	}
+
+	template <typename S = std::string>
+	void print_at_cursor(S&& str) {
+		printw(str.c_str());
+	}
+
+	void clear_screen() {
+		clear();
+	}
 	void refresh_screen() {
 		refresh();
 	}
@@ -33,6 +47,8 @@ struct Screen {
 	}
 
 private:
+//	int _screen_height = 24;
+//	int _screen_width = 80;
 	bool _active = true;
 };
 

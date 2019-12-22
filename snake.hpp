@@ -1,13 +1,24 @@
 #include <string>
+#include <memory>
+#include <utility>
 
-struct snake {
-	void grow() {
-		_snake.append("@");
-	}
+struct  snake_part {
+	snake_part(std::string str = {"@"}) :_part(std::move(str)), next(nullptr) {}
+	std::string _part;
+	snake_part* next;
 
-	std::string get_snake() {
-		return _snake;
+	~snake_part() {
+		snake_part* curr = nullptr;
+		while(curr) {
+
+		}
 	}
+};
+
+class snake {
+public:
+	snake() : _head(std::make_unique<snake_part>()) {}
+	~snake() {}
 private:
-	std::string _snake = "@";
+	std::unique_ptr<snake_part> _head;
 };

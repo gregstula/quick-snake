@@ -38,6 +38,8 @@ flags = [
     'c++',
     '-Wall',
     '-Werror',
+    '-std=c++17',
+    '-stdlib=libc++'
 ]
 
 
