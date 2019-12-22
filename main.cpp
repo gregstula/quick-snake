@@ -2,16 +2,18 @@
 #include <utility>
 #include <ncurses.h>
 
-#include "screen.hpp"
+#include "screen.h"
+#include "snake.h"
 
-int main() {
-	Screen screen = Screen();
-		screen.clear_screen();
+int main()
+{
+	curses::screen screen{};
+	screen.clear_screen();
 
-		const std::string test{"Hello World"};
-		screen.print_at_coords(80/2, 24/2, test);
-
-		getch();
-		screen.refresh_screen();
-		return 0;
+	snake_game::snake snake{};
+	auto[y,x,str] = snake.get_draw_data();
+	screen.print_at_coords(y,x,str);
+	getch();
+	screen.refresh_screen();
+	return 0;
 }
