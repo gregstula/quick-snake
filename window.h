@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <ncurses.h>
 namespace curses {
@@ -22,6 +23,10 @@ namespace curses {
 
 		void clear_from_cursor_to_eol() {
 			wclrtoeol(this->_win);
+		}
+
+		void win_box() {
+			box(this->_win, 0, 0);
 		}
 
 		template <typename S = std::string>

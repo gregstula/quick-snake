@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ncurses.h>
 #include <string>
 
@@ -9,7 +11,9 @@ namespace curses {
 			initscr();
 			raw();
 			noecho();
+			cbreak();
 			keypad(stdscr, TRUE);
+			nodelay(stdscr, TRUE);
 			if(has_colors()) {
 				start_color();
 			}

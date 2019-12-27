@@ -1,3 +1,4 @@
+#pragma once
 #include <utility>
 #include <tuple>
 #include <memory>
@@ -7,15 +8,19 @@
 
 namespace snake_game {
 
-
+using window = curses::window;
 struct game {
-	game() : window(std::make_unique<curses::window>()) {}
+	game(snake& s, window w) : snk(s), win(w) {};
 
-private:
-	std::unique_ptr<curses::window> window;
-	snake _snake{};
+	snake snk;
+	window win{80,24,0,0};
+
+	void render_snake() {
+		for(auto& snake_part : snk.snake_body) {
+			auto[y,x,str] = snake_part.get_draw_data();
+			win.print_at_coords(y,x,str);
+		}
+	}
 };
-
-
 
 } //namespace snake

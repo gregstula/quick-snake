@@ -1,37 +1,23 @@
-#include <string>
-#include <memory>
-#include <utility>
-#include <tuple>
+#pragma once
+#include "interface_drawable.h"
 
 namespace snake_game {
 
-struct snake_part
-{
-	~snake_part();
-
-	std::tuple<int, int, std::string> get_draw_data();
-
-	private:
-		snake_part* grow();
-		std::string _part = "@";
-		std::tuple<int,int> coords = std::make_tuple(0,0);
-		std::tuple<int,int> last_coords = std::make_tuple(0,0);
-		snake_part* _next = nullptr;
-		friend struct snake;
+struct snake_part : interface_drawable {
+	snake_part(coords position) : interface_drawable(position, "@") {};
 };
-
 
 struct snake {
-	snake();
-	~snake();
+	snake(coords head, coords tail) : snake_body{{head}, {tail}} {};
+	vector<snake_part> snake_body;
+	void shift_snake();
 	void grow();
+	void move(coords direction);
 
-	std::tuple<int, int, std::string> get_draw_data();
-
-	private:
-		snake_part* _head;
-		snake_part* _tail;
 };
 
+struct food : interface_drawable {
+	food(coords position) : interface_drawable(position, "o") {};
+};
 
 } // namespace snake_game
