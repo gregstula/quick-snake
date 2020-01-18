@@ -25,8 +25,8 @@ namespace curses {
 			wclrtoeol(this->_win);
 		}
 
-		void win_box() {
-			box(this->_win, 0, 0);
+		void refresh() {
+			wrefresh(this->_win);
 		}
 
 		template <typename S = std::string>
@@ -38,7 +38,6 @@ namespace curses {
 			void print_at_cursor(S&& str) {
 				wprintw(this->_win, str.c_str());
 			}
-
 
 	private:
 		WINDOW* _win;
