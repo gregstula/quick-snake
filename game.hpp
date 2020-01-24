@@ -29,7 +29,7 @@ class game {
     game_state current_state;
     game_state previous_state;
 
-    uint_fast64_t frames = 0;
+    int frames = 0;
 
     auto process_input(int input) -> void;
     auto render() -> void;

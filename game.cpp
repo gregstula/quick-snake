@@ -53,10 +53,6 @@ auto game::game_loop() -> void
     using std::chrono::milliseconds;
     using std::chrono::duration_cast;
 
-    std::freopen("log.txt", "w", stdout);
-    std::freopen("errlog.txt", "w", stderr);
-
-    auto start_time = now();
     while (is_running) {
         auto current_time = now();
         //auto elapsed_time = current_time - previous_time;
@@ -67,15 +63,6 @@ auto game::game_loop() -> void
         auto frame_time = duration_cast<nanoseconds>(current_time - now());
         std::this_thread::sleep_for( frame_time + NS_PER_FRAME);
 
-        // for FPS counter
-        auto total_time = duration_cast<milliseconds>(start_time - now());
-        if (total_time >= milliseconds(1000)) {
-            main_win.print_at_coords(10,10, std::to_string(frames));
-            std::cout << std::to_string(frames) << "\n";
-            frames = 0;
-        } else {
-            frames++;
-        }
     }
 }
 
