@@ -1,5 +1,6 @@
-#include "interface_drawable.h"
+#include "interface_drawable.hpp"
 namespace snake_game {
+
 // Return data needed for drawing
 // Coordinates and ascii representation
 auto interface_drawable::get_draw_data() -> draw_data
@@ -7,7 +8,8 @@ auto interface_drawable::get_draw_data() -> draw_data
 	return {_coords, _sprite};
 }
 
-auto interface_drawable::get_coords() -> coords {
+auto interface_drawable::get_coords() -> coords
+{
 	return _coords;
 }
 
@@ -17,16 +19,29 @@ void interface_drawable::set_coords(coords new_coords)
 	_coords = new_coords;
 }
 
-}; // namespace snake_game
+}; /* namespace snake_game */
 
-auto add_coords(snake_game::coords lhs, snake_game::coords rhs) -> snake_game::coords {
+
+using snake_game::coords;
+auto add_coords(coords lhs, coords rhs) -> coords
+{
 	auto[lhs_y, lhs_x] = lhs;
 	auto[rhs_y, rhs_x] = rhs;
 	return {.y = lhs_y + rhs_y, .x = lhs_x + rhs_x};
 }
 
-auto operator +(snake_game::coords lhs, snake_game::coords rhs) -> snake_game::coords {
+auto operator +(coords lhs, coords rhs) -> coords
+{
 	return add_coords(lhs, rhs);
 }
 
+auto operator ==(coords lhs, coords rhs) -> bool
+{
+    return (lhs.x == rhs.x && lhs.y == rhs.y);
+}
+
+auto operator !=(coords lhs, coords rhs) -> bool
+{
+    return (lhs.x != rhs.x || lhs.y != rhs.y);
+}
 

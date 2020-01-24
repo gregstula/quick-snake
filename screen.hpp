@@ -14,6 +14,7 @@ namespace curses {
 			cbreak();
 			keypad(stdscr, TRUE);
 			nodelay(stdscr, TRUE);
+            curs_set(0);
 			if(has_colors()) {
 				start_color();
 			}

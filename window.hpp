@@ -9,6 +9,10 @@ namespace curses {
 			_win = newwin(height, width, startx, starty);
 		}
 
+        window() {
+            _win = nullptr;
+        }
+
 		~window() {
 			delwin(_win);
 		}
@@ -25,7 +29,7 @@ namespace curses {
 			wclrtoeol(this->_win);
 		}
 
-		void refresh() {
+		void refresh_window() {
 			wrefresh(this->_win);
 		}
 
