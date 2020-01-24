@@ -2,8 +2,26 @@
 
 #include <ncurses.h>
 #include <string>
-
 namespace curses {
+
+// Attatch a window to this class to use
+// RAII to refresh an ncurses screen automatically when it falls out of scopt
+template <typename Screen>
+struct refresh_guard {
+    typedef Screen screen_type;
+
+    inline explicit refresh_guard(screen_type& s)
+        : screen(s)
+    {
+        screen.clear();
+    }
+    inline ~refresh_guard() { screen.refresh(); }
+    refresh_guard& operator=(refresh_guard const&) = delete;
+    refresh_guard(refresh_guard const&) = delete;
+
+private:
+    screen_type& screen;
+};
 
 class screen {
 public:
@@ -16,9 +34,9 @@ public:
         keypad(stdscr, TRUE);
         nodelay(stdscr, TRUE);
         curs_set(0);
-//        if (has_colors()) {
-//            start_color();
-//        }
+        //        if (has_colors()) {
+        //            start_color();
+        //        }
     }
 
     ~screen()
@@ -43,13 +61,13 @@ public:
         printw(str.c_str());
     }
 
-    void clear_screen()
+    void clear()
     {
-        clear();
+        ::clear();
     }
-    void refresh_screen()
+    void refresh()
     {
-        refresh();
+        ::refresh();
     }
 
     bool is_active()

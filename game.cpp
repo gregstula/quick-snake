@@ -1,44 +1,81 @@
-#include "game.hpp"
 #include <chrono>
 #include <thread>
+#include <cstdint>
+#include <iostream>
+#include "game.hpp"
 
 namespace snake_game {
 // 1 / 60 fps = 16 ms
-//constexpr auto TIME_STEP = std::chrono::nanoseconds(std::chrono::milliseconds(16));
+constexpr auto NS_PER_FRAME = std::chrono::nanoseconds(std::chrono::milliseconds(16));
+
+inline auto game::process_input(int input) -> void
+{
+    if (input == KEY_END) end_game();
+
+    switch (input) {
+    case KEY_UP:
+        if (last_direction != direction::SOUTH) last_direction = direction::NORTH;
+        snake.move(last_direction);
+        break;
+
+    case KEY_DOWN:
+        if (last_direction != direction::NORTH) last_direction = direction::SOUTH;
+        snake.move(last_direction);
+        break;
+
+    case KEY_RIGHT:
+        if (last_direction != direction::WEST) last_direction = direction::EAST;
+        snake.move(last_direction);
+        break;
+
+    case KEY_LEFT:
+        if (last_direction != direction::EAST) last_direction = direction::WEST;
+        snake.move(last_direction);
+        break;
+    default:
+        snake.move(last_direction);
+        break;
+    }
+}
+
+inline auto game::render() -> void
+{
+    render_snake();
+}
+
+inline auto now() -> game_time {
+    return std::chrono::high_resolution_clock::now();
+}
 
 auto game::game_loop() -> void
 {
+    using std::chrono::nanoseconds;
+    using std::chrono::milliseconds;
+    using std::chrono::duration_cast;
+
+    std::freopen("log.txt", "w", stdout);
+    std::freopen("errlog.txt", "w", stderr);
+
+    auto start_time = now();
     while (is_running) {
+        auto current_time = now();
+        //auto elapsed_time = current_time - previous_time;
+        curses::refresh_guard<curses::window> auto_refresh(main_win);
         int input = getch();
-        if (input == KEY_END) end_game();
-        switch (input) {
-        case KEY_UP:
-            if (last_direction != direction::SOUTH) last_direction = direction::NORTH;
-            snake.move(last_direction);
-            break;
+        process_input(input);
+        render();
+        auto frame_time = duration_cast<nanoseconds>(current_time - now());
+        std::this_thread::sleep_for( frame_time + NS_PER_FRAME);
 
-        case KEY_DOWN:
-            if (last_direction != direction::NORTH) last_direction = direction::SOUTH;
-            snake.move(last_direction);
-            break;
-
-        case KEY_RIGHT:
-            if (last_direction != direction::WEST) last_direction = direction::EAST;
-            snake.move(last_direction);
-            break;
-
-        case KEY_LEFT:
-            if (last_direction != direction::EAST) last_direction = direction::WEST;
-            snake.move(last_direction);
-            break;
-        default:
-            snake.move(last_direction);
-            break;
+        // for FPS counter
+        auto total_time = duration_cast<milliseconds>(start_time - now());
+        if (total_time >= milliseconds(1000)) {
+            main_win.print_at_coords(10,10, std::to_string(frames));
+            std::cout << std::to_string(frames) << "\n";
+            frames = 0;
+        } else {
+            frames++;
         }
-        main_win.clear_window();
-        render_snake();
-        main_win.refresh_window();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
@@ -50,7 +87,13 @@ auto game::render_snake() -> void
     }
 }
 
-auto game::end_game() -> void
+inline auto game::render_food() -> void
+{
+    auto [y, x, str] = food.get_draw_data();
+    main_win.print_at_coords(y, x, str);
+}
+
+inline auto game::end_game() -> void
 {
     is_running = false;
 }

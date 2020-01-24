@@ -1,6 +1,8 @@
 #pragma once
 #include <ncurses.h>
 #include <string>
+#include "screen.hpp"
+
 namespace curses {
 
 struct window {
@@ -19,7 +21,7 @@ struct window {
         delwin(_win);
     }
 
-    void clear_window()
+    void clear()
     {
         wclear(this->_win);
     }
@@ -34,7 +36,7 @@ struct window {
         wclrtoeol(this->_win);
     }
 
-    void refresh_window()
+    void refresh()
     {
         wrefresh(this->_win);
     }
