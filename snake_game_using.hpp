@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace snake_game {
-    using std::vector;
-    using std::string;
+using std::string;
+using std::vector;
 }

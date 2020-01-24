@@ -1,4 +1,10 @@
+CC = clang++
+CFLAGS = -x c++ -Wall -stdlib=libc++ -std=c++17
+LIBS =-lncurses
 all:
-	clang++ -x c++ -Wall -Werror -lncurses -stdlib=libc++ -std=c++17 -o curse interface_drawable.cpp snake.cpp main.cpp game.cpp
+	$(CC) $(CFLAGS) $(LIBS) -o snake interface_drawable.cpp snake.cpp main.cpp game.cpp
 clean:
-	rm curse *.o
+	@rm -f snake
+	@rm -f *.o
+format:
+	clang-format --verbose --sort-includes -i *.cpp *.hpp

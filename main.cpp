@@ -1,16 +1,16 @@
-#include <string>
-#include <utility>
-#include <ncurses.h>
-#include <iostream>
-#include <sstream>
 #include <chrono>
+#include <iostream>
+#include <ncurses.h>
+#include <sstream>
+#include <string>
 #include <thread>
+#include <utility>
 
-#include "screen.hpp"
-#include "window.hpp"
-#include "snake.hpp"
-#include "interface_drawable.hpp"
 #include "game.hpp"
+#include "interface_drawable.hpp"
+#include "screen.hpp"
+#include "snake.hpp"
+#include "window.hpp"
 
 struct game_state {
     int score = 0;
@@ -18,10 +18,10 @@ struct game_state {
 
 int main()
 {
-	auto screen = curses::screen();
+    auto screen = curses::screen();
     auto game = snake_game::game();
     game.game_loop();
-	return 0;
+    return 0;
 }
 
 ;
