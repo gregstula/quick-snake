@@ -13,7 +13,7 @@ struct snake {
         : snake_body { { head }, { tail } } {};
 
     auto grow() -> void;
-    auto move(coords direction) -> void;
+    auto move(coords direction) -> coords;
     auto body() -> std::vector<snake_part>&; // accessor interface for snake body
 
 private:

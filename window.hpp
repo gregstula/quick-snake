@@ -1,7 +1,7 @@
 #pragma once
+#include "screen.hpp"
 #include <ncurses.h>
 #include <string>
-#include "screen.hpp"
 
 namespace curses {
 

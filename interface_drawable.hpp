@@ -25,6 +25,8 @@ struct direction {
     constexpr static coords SOUTH = { 1, 0 };
     constexpr static coords EAST = { 0, 1 };
     constexpr static coords WEST = { 0, -1 };
+
+    static auto invert_direction(coords dir) -> coords;
 };
 
 struct interface_drawable {

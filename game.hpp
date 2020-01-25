@@ -1,11 +1,11 @@
 #pragma once
 
 #include <chrono>
+#include <fstream>
 #include <memory>
 #include <thread>
 #include <tuple>
 #include <utility>
-#include <fstream>
 
 #include "snake.hpp"
 #include "window.hpp"
@@ -25,6 +25,7 @@ class game {
 
     snake_game::snake snake = snake_game::snake({ 10, 10 }, { 10, 11 });
     snake_game::food food = snake_game::food({ 0, 0 });
+    curses::window main_win = curses::window(GAME_HEIGHT, GAME_WIDTH, 10, 10);
 
     game_state current_state;
     game_state previous_state;
@@ -32,15 +33,14 @@ class game {
     int frames = 0;
 
     auto process_input(int input) -> void;
+    auto update() -> void;
     auto render() -> void;
     auto render_snake() -> void;
     auto render_food() -> void;
 
 public:
-    curses::window main_win = curses::window(GAME_HEIGHT, GAME_WIDTH, 10, 10);
     auto end_game() -> void;
     auto game_loop() -> void;
-
 };
 
 } //namespace snake
