@@ -1,6 +1,7 @@
+#include <ncurses.h>
+
 #include <chrono>
 #include <iostream>
-#include <ncurses.h>
 #include <sstream>
 #include <string>
 #include <thread>

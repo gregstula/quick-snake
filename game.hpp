@@ -43,4 +43,4 @@ public:
     auto game_loop() -> void;
 };
 
-} //namespace snake
+} // namespace snake_game

@@ -12,10 +12,7 @@ struct coords {
 };
 
 struct draw_data {
-    draw_data(coords c, std::string s)
-        : y(c.y)
-        , x(c.x)
-        , s(s) {};
+    draw_data(coords c, std::string s) : y(c.y), x(c.x), s(s) {};
     int y, x;
     std::string s;
 };
@@ -31,9 +28,8 @@ struct direction {
 
 struct interface_drawable {
     template <class Coords, class String>
-    interface_drawable(Coords&& position, String&& sprite)
-        : _coords(std::forward<Coords>(position))
-        , _sprite(std::forward<String>(sprite)) {};
+    interface_drawable(Coords&& position, String&& sprite) : _coords(std::forward<Coords>(position)),
+                                                             _sprite(std::forward<String>(sprite)) {};
 
     auto get_draw_data() -> draw_data;
     auto get_coords() -> coords;

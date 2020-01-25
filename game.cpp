@@ -1,4 +1,5 @@
 #include "game.hpp"
+
 #include <chrono>
 #include <cstdint>
 #include <iostream>
@@ -10,23 +11,28 @@ constexpr auto NS_PER_FRAME = std::chrono::nanoseconds(std::chrono::milliseconds
 
 inline auto game::process_input(int input) -> void
 {
-    if (input == KEY_END) end_game();
+    if (input == KEY_END)
+        end_game();
 
     switch (input) {
     case KEY_UP:
-        if (last_direction != direction::SOUTH) last_direction = direction::NORTH;
+        if (last_direction != direction::SOUTH)
+            last_direction = direction::NORTH;
         break;
 
     case KEY_DOWN:
-        if (last_direction != direction::NORTH) last_direction = direction::SOUTH;
+        if (last_direction != direction::NORTH)
+            last_direction = direction::SOUTH;
         break;
 
     case KEY_RIGHT:
-        if (last_direction != direction::WEST) last_direction = direction::EAST;
+        if (last_direction != direction::WEST)
+            last_direction = direction::EAST;
         break;
 
     case KEY_LEFT:
-        if (last_direction != direction::EAST) last_direction = direction::WEST;
+        if (last_direction != direction::EAST)
+            last_direction = direction::WEST;
         break;
     default:
         break;
@@ -40,16 +46,18 @@ inline auto game::update() -> void
 
     if (next_position.x == 0) {
         snake.teleport(coords { next_position.y, GAME_WIDTH });
-    } else if (next_position.x == GAME_WIDTH) {
-        //last_direction = direction::invert_direction(last_direction);
+    }
+    else if (next_position.x == GAME_WIDTH) {
+        // last_direction = direction::invert_direction(last_direction);
         snake.teleport(coords { next_position.y, 0 });
     }
 
     // TODO check literal corner case
     if (next_position.y == 0) {
-        //last_direction = direction::invert_direction(last_direction);
+        // last_direction = direction::invert_direction(last_direction);
         snake.teleport(coords { GAME_HEIGHT, next_position.x });
-    } else if (next_position.y == GAME_HEIGHT) {
+    }
+    else if (next_position.y == GAME_HEIGHT) {
         snake.teleport(coords { 0, next_position.x });
     }
 }
@@ -74,7 +82,7 @@ auto game::game_loop() -> void
 
     while (is_running) {
         auto current_time = now();
-        //auto elapsed_time = current_time - previous_time;
+        // auto elapsed_time = current_time - previous_time;
         curses::refresh_guard<curses::window> auto_refresh(main_win);
         int input = getch();
         process_input(input);

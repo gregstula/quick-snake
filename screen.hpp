@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ncurses.h>
+
 #include <string>
 namespace curses {
 
@@ -10,8 +11,7 @@ template <typename Screen>
 struct refresh_guard {
     typedef Screen screen_type;
 
-    inline explicit refresh_guard(screen_type& s)
-        : screen(s)
+    inline explicit refresh_guard(screen_type& s) : screen(s)
     {
         screen.clear();
     }
@@ -39,15 +39,9 @@ public:
         //        }
     }
 
-    ~screen()
-    {
-        endwin();
-    }
+    ~screen() { endwin(); }
 
-    int get_key()
-    {
-        return getch();
-    }
+    int get_key() { return getch(); }
 
     template <typename S = std::string>
     void print_at_coords(int y, int x, S&& str)
@@ -61,24 +55,12 @@ public:
         printw(str.c_str());
     }
 
-    void clear()
-    {
-        ::clear();
-    }
-    void refresh()
-    {
-        ::refresh();
-    }
+    void clear() { ::clear(); }
+    void refresh() { ::refresh(); }
 
-    bool is_active()
-    {
-        return _active;
-    }
+    bool is_active() { return _active; }
 
-    void quit()
-    {
-        _active = false;
-    }
+    void quit() { _active = false; }
 
 private:
     //	int _screen_height = 24;

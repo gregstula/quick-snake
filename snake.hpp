@@ -4,14 +4,11 @@ namespace snake_game {
 
 struct snake_part : interface_drawable {
     template <class Coords = coords>
-    snake_part(Coords&& position)
-        : interface_drawable(std::forward<Coords>(position), "@") {};
+    snake_part(Coords&& position) : interface_drawable(std::forward<Coords>(position), "@") {};
 };
 
 struct snake {
-
-    snake(coords head, coords tail)
-        : snake_body { { head }, { tail } } {};
+    snake(coords head, coords tail) : snake_body { { head }, { tail } } {};
 
     auto grow() -> void;
     auto body() -> std::vector<snake_part>&; // accessor interface for snake body
@@ -30,7 +27,8 @@ struct snake {
         return std::move(new_coords);
     }
 
-    // Teleports the head of the snake to a given position without caring about cardinal directions
+    // Teleports the head of the snake to a given position without caring about
+    // cardinal directions
     template <class Coords>
     auto teleport(Coords&& next_point) -> void
     {
@@ -45,8 +43,7 @@ private:
 };
 
 struct food : interface_drawable {
-    food(coords position)
-        : interface_drawable(position, "o") {};
+    food(coords position) : interface_drawable(position, "o") {};
 };
 
 } // namespace snake_game

@@ -1,7 +1,9 @@
 #pragma once
-#include "screen.hpp"
 #include <ncurses.h>
+
 #include <string>
+
+#include "screen.hpp"
 
 namespace curses {
 
@@ -11,35 +13,17 @@ struct window {
         _win = newwin(height, width, startx, starty);
     }
 
-    window()
-    {
-        _win = nullptr;
-    }
+    window() { _win = nullptr; }
 
-    ~window()
-    {
-        delwin(_win);
-    }
+    ~window() { delwin(_win); }
 
-    void clear()
-    {
-        wclear(this->_win);
-    }
+    void clear() { wclear(this->_win); }
 
-    void clear_from_cursor_to_bottom()
-    {
-        wclrtobot(this->_win);
-    }
+    void clear_from_cursor_to_bottom() { wclrtobot(this->_win); }
 
-    void clear_from_cursor_to_eol()
-    {
-        wclrtoeol(this->_win);
-    }
+    void clear_from_cursor_to_eol() { wclrtoeol(this->_win); }
 
-    void refresh()
-    {
-        wrefresh(this->_win);
-    }
+    void refresh() { wrefresh(this->_win); }
 
     template <typename S = std::string>
     void print_at_coords(int y, int x, S&& str)
@@ -57,4 +41,4 @@ private:
     WINDOW* _win;
 };
 
-} //namespace curses
+} // namespace curses
