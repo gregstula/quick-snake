@@ -7,7 +7,8 @@
 
 namespace snake_game {
 // 1 / 60 fps = 16 ms
-constexpr auto NS_PER_FRAME = std::chrono::nanoseconds(std::chrono::milliseconds(16));
+using namespace std::chrono_literals;
+constexpr auto FRAME = 32ms;
 
 inline auto game::process_input(int input) -> void
 {
@@ -77,7 +78,6 @@ inline auto now() -> game_time
 auto game::game_loop() -> void
 {
     using std::chrono::duration_cast;
-    using std::chrono::milliseconds;
     using std::chrono::nanoseconds;
 
     while (is_running) {
@@ -88,8 +88,8 @@ auto game::game_loop() -> void
         process_input(input);
         update();
         render();
-        auto frame_time = duration_cast<nanoseconds>(current_time - now());
-        std::this_thread::sleep_for(frame_time + NS_PER_FRAME);
+        auto loop_time = duration_cast<nanoseconds>(current_time - now());
+        std::this_thread::sleep_for(loop_time + FRAME);
     }
 }
 
