@@ -13,10 +13,8 @@ struct snake {
     auto grow() -> void;
     auto body() -> std::vector<snake_part>&; // accessor interface for snake body
 
-    // moves the head of snake to the next position
-    // function expects a direction constant from the direction:: struct
     template <class Coords> // universal reference
-    auto move(Coords&& direction) -> coords&& // rvalue reference
+    auto move(Coords&& direction) -> void // rvalue reference
     {
         // pop the tail, key to snake-like movement
         snake_body.pop_back();
@@ -24,13 +22,21 @@ struct snake {
         auto new_coords = snake_body.at(0).get_coords() + direction;
         // create new head at first position
         snake_body.emplace(std::begin(snake_body), snake_part { new_coords });
+    }
+
+    // calcutates the next position
+    template <class Coords> // forwarding reference
+    auto next_position(Coords&& direction) -> coords&& // rvalue reference
+    {
+        // get coords for next head
+        auto new_coords = snake_body.at(0).get_coords() + direction;
         return std::move(new_coords);
     }
 
     // Teleports the head of the snake to a given position without caring about
     // cardinal directions
-    template <class Coords>
-    auto teleport(Coords&& next_point) -> void
+    template <class Coords> // forwarding reference
+    inline auto teleport(Coords&& next_point) -> void
     {
         // similar to move
         snake_body.pop_back();

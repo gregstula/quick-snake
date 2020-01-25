@@ -25,16 +25,21 @@ struct window {
 
     void refresh() { wrefresh(this->_win); }
 
-    template <typename S = std::string>
-    void print_at_coords(int y, int x, S&& str)
+    template <class String>
+    void print_at_coords(int y, int x, String&& str)
     {
         mvwprintw(this->_win, y, x, str.c_str());
     }
 
-    template <typename S = std::string>
-    void print_at_cursor(S&& str)
+    template <class String>
+    void print_at_cursor(String&& str)
     {
         wprintw(this->_win, str.c_str());
+    }
+
+    void print_border()
+    {
+        wborder(_win, '|', '|', '-', '-', '+', '+', '+', '+');
     }
 
 private:

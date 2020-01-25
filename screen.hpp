@@ -1,20 +1,22 @@
 #pragma once
 
+#include <iostream>
 #include <ncurses.h>
-
 #include <string>
 namespace curses {
 
 // Attatch a window to this class to use
 // RAII to refresh an ncurses screen automatically when it falls out of scopt
-template <typename Screen>
+template <class Screen>
 struct refresh_guard {
     typedef Screen screen_type;
 
     inline explicit refresh_guard(screen_type& s) : screen(s)
     {
         screen.clear();
+        screen.print_border();
     }
+
     inline ~refresh_guard() { screen.refresh(); }
     refresh_guard& operator=(refresh_guard const&) = delete;
     refresh_guard(refresh_guard const&) = delete;
@@ -27,6 +29,7 @@ class screen {
 public:
     screen()
     {
+        setlocale(LC_ALL, "en_US.UTF-8");
         initscr();
         raw();
         noecho();
@@ -61,6 +64,7 @@ public:
     bool is_active() { return _active; }
 
     void quit() { _active = false; }
+    void print_border() {};
 
 private:
     //	int _screen_height = 24;
