@@ -58,5 +58,5 @@ auto operator==(coords lhs, coords rhs) -> bool
 
 auto operator!=(coords lhs, coords rhs) -> bool
 {
-    return (lhs.x != rhs.x || lhs.y != rhs.y);
+    return !(lhs == rhs);
 }

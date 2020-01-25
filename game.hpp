@@ -19,6 +19,7 @@ struct game_state {
 };
 
 using namespace std::chrono_literals;
+using std::chrono::nanoseconds;
 class game {
     bool is_running = true;
     coords last_direction = direction::WEST;
@@ -28,13 +29,14 @@ class game {
     curses::window main_win = curses::window(GAME_HEIGHT, GAME_WIDTH, 10, 10);
 
     // 1 frame at 60 fps = 16 ms
-    std::chrono::milliseconds game_speed = 16ms;
+    nanoseconds game_speed = 16ms;
 
     game_state current_state;
     game_state previous_state;
 
-    auto process_input() -> void;
+    auto process_input(int input) -> void;
     auto update() -> void;
+    void update(nanoseconds delay);
     auto render() -> void;
     auto render_snake() -> void;
     auto render_food() -> void;
