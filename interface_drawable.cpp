@@ -19,8 +19,9 @@ auto interface_drawable::set_coords(coords new_coords) -> void
     _coords = new_coords;
 }
 
-auto direction::invert_direction(coords dir) -> coords {
-    if (dir == NORTH ) {
+auto direction::invert_direction(coords dir) -> coords
+{
+    if (dir == NORTH) {
         return SOUTH;
     }
     if (dir == SOUTH) {
@@ -59,4 +60,3 @@ auto operator!=(coords lhs, coords rhs) -> bool
 {
     return (lhs.x != rhs.x || lhs.y != rhs.y);
 }
-

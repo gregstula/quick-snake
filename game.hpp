@@ -11,7 +11,7 @@
 #include "window.hpp"
 namespace snake_game {
 
-constexpr int GAME_HEIGHT = 24;
+constexpr int GAME_HEIGHT = 40;
 constexpr int GAME_WIDTH = 80;
 using game_time = std::chrono::time_point<std::chrono::high_resolution_clock>;
 

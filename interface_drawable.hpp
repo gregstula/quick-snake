@@ -30,9 +30,10 @@ struct direction {
 };
 
 struct interface_drawable {
-    interface_drawable(coords position, std::string sprite)
-        : _coords(position)
-        , _sprite(sprite) {};
+    template <class Coords, class String>
+    interface_drawable(Coords&& position, String&& sprite)
+        : _coords(std::forward<Coords>(position))
+        , _sprite(std::forward<String>(sprite)) {};
 
     auto get_draw_data() -> draw_data;
     auto get_coords() -> coords;

@@ -3,8 +3,9 @@
 namespace snake_game {
 
 struct snake_part : interface_drawable {
-    snake_part(coords position)
-        : interface_drawable(position, "@") {};
+    template <class Coords = coords>
+    snake_part(Coords&& position)
+        : interface_drawable(std::forward<Coords>(position), "@") {};
 };
 
 struct snake {
@@ -13,8 +14,31 @@ struct snake {
         : snake_body { { head }, { tail } } {};
 
     auto grow() -> void;
-    auto move(coords direction) -> coords;
     auto body() -> std::vector<snake_part>&; // accessor interface for snake body
+
+    // moves the head of snake to the next position
+    // function expects a direction constant from the direction:: struct
+    template <class Coords> // universal reference
+    auto move(Coords&& direction) -> coords&& // rvalue reference
+    {
+        // pop the tail, key to snake-like movement
+        snake_body.pop_back();
+        // get coords for next head
+        auto new_coords = snake_body.at(0).get_coords() + direction;
+        // create new head at first position
+        snake_body.emplace(std::begin(snake_body), snake_part { new_coords });
+        return std::move(new_coords);
+    }
+
+    // Teleports the head of the snake to a given position without caring about cardinal directions
+    template <class Coords>
+    auto teleport(Coords&& next_point) -> void
+    {
+        // similar to move
+        snake_body.pop_back();
+        // create new head at new position
+        snake_body.emplace(std::begin(snake_body), snake_part(next_point));
+    }
 
 private:
     std::vector<snake_part> snake_body;

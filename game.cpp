@@ -33,19 +33,34 @@ inline auto game::process_input(int input) -> void
     }
 }
 
+// All gamestate update logic goes here
 inline auto game::update() -> void
 {
-    auto next_position = snake.move(last_direction);
-    if (next_position.x == 0 || next_position.x == GAME_WIDTH) {
-        last_direction = direction::invert_direction(last_direction);
+    auto&& next_position = snake.move(last_direction);
+
+    if (next_position.x == 0) {
+        snake.teleport(coords { next_position.y, GAME_WIDTH });
+    } else if (next_position.x == GAME_WIDTH) {
+        //last_direction = direction::invert_direction(last_direction);
+        snake.teleport(coords { next_position.y, 0 });
+    }
+
+    // TODO check literal corner case
+    if (next_position.y == 0) {
+        //last_direction = direction::invert_direction(last_direction);
+        snake.teleport(coords { GAME_HEIGHT, next_position.x });
+    } else if (next_position.y == GAME_HEIGHT) {
+        snake.teleport(coords { 0, next_position.x });
     }
 }
 
+// all render logic goes here
 inline auto game::render() -> void
 {
     render_snake();
 }
 
+// Get's the current time
 inline auto now() -> game_time
 {
     return std::chrono::high_resolution_clock::now();
