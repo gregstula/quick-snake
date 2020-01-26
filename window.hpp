@@ -25,6 +25,8 @@ struct window {
 
     void refresh() { wrefresh(this->_win); }
 
+    int get_key() { return wgetch(this->_win); }
+
     template <class String = std::string>
     void print_at_coords(int y, int x, String&& s)
     {

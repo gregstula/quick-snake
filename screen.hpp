@@ -31,12 +31,13 @@ public:
     {
         setlocale(LC_ALL, "en_US.UTF-8");
         initscr();
-        raw();
-        noecho();
         cbreak();
+        noecho();
         keypad(stdscr, TRUE);
-        nodelay(stdscr, TRUE);
+        meta(stdscr, TRUE);
+        nodelay(stdscr, TRUE); // let getch pass through
         curs_set(0);
+        typeahead(-1); // turn off look ahead optimization
         //        if (has_colors()) {
         //            start_color();
         //        }

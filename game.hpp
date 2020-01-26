@@ -34,7 +34,7 @@ class game {
     game_state current_state;
     game_state previous_state;
 
-    auto process_input(int input) -> void;
+    auto process_input(int input) -> int;
     auto update() -> void;
     void update(nanoseconds delay);
     auto render() -> void;

@@ -8,25 +8,32 @@
 
 namespace snake_game {
 bool last_move_processed = false;
-inline auto game::process_input(int input) -> void
+inline auto game::process_input(int input) -> int
 {
     if (input == KEY_END)
         end_game();
     switch (input) {
     case KEY_UP:
-        if (last_direction != direction::SOUTH) last_direction = direction::NORTH;
-        break;
+        if (last_direction != direction::SOUTH) {
+            last_direction = direction::NORTH;
+        }
 
     case KEY_DOWN:
-        if (last_direction != direction::NORTH) last_direction = direction::SOUTH;
+        if (last_direction != direction::SOUTH) {
+            last_direction = direction::SOUTH;
+        }
         break;
 
     case KEY_RIGHT:
-        if (last_direction != direction::WEST) last_direction = direction::EAST;
+        if (last_direction != direction::WEST) {
+            last_direction = direction::EAST;
+        }
         break;
 
     case KEY_LEFT:
-        if (last_direction != direction::EAST) last_direction = direction::WEST;
+        if (last_direction != direction::WEST) {
+            last_direction = direction::WEST;
+        }
         break;
     case 43: // plus sign
         increment_game_speed();
@@ -40,6 +47,7 @@ inline auto game::process_input(int input) -> void
     default:
         break;
     };
+    return input;
 }
 
 // All gamestate update logic goes here
@@ -97,13 +105,14 @@ auto game::game_loop() -> void
     using std::chrono::nanoseconds;
 
     int input = 0;
+    int last_input=0;
     while (is_running) {
         auto current_time = now();
         // only get one character at a time
-        while ((input = getch()) != ERR) break;
-        process_input(input);
-        auto loop_time = duration_cast<nanoseconds>(current_time - now());
+        input = getch();
+        last_input = process_input(input);
         render();
+        auto loop_time = duration_cast<nanoseconds>(current_time - now());
         if (last_direction == direction::NORTH || last_direction == direction::SOUTH) {
             update(duration_cast<nanoseconds>(loop_time + game_speed * 1.75));
         }
