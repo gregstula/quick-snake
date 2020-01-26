@@ -47,7 +47,6 @@ inline auto game::process_input(int input) -> int
     default:
         break;
     };
-    flushinp(); // took me forever to find this this thing!
     return input;
 }
 
@@ -112,14 +111,14 @@ auto game::game_loop() -> void
         // only get one character at a time
         input = getch();
         last_input = process_input(input);
-
+        update();
         render();
         auto loop_time = duration_cast<nanoseconds>(current_time - now());
         if (last_direction == direction::NORTH || last_direction == direction::SOUTH) {
-            update(duration_cast<nanoseconds>(loop_time + game_speed * 1.75));
+            std::this_thread::sleep_for(loop_time + game_speed * 1.75);
         }
         else {
-            update(loop_time + game_speed);
+            std::this_thread::sleep_for(loop_time + game_speed);
         }
     }
 }
@@ -128,7 +127,7 @@ auto game::render_snake() -> void
 {
     for (auto&& snake_part : snake.body()) {
         auto [y, x, str] = snake_part.get_draw_data();
-        main_win.print_at_coords(y, x, str);
+            main_win.print_at_coords(y, x, str);
     }
     std::stringstream s;
     s << "last direction: " << last_direction.x << ", " << last_direction.y;
