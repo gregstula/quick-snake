@@ -105,7 +105,7 @@ auto game::game_loop() -> void
     using std::chrono::nanoseconds;
 
     int input = 0;
-    int last_input=0;
+    int last_input = 0;
     while (is_running) {
         auto current_time = now();
         // only get one character at a time
@@ -127,7 +127,7 @@ auto game::render_snake() -> void
 {
     for (auto&& snake_part : snake.body()) {
         auto [y, x, str] = snake_part.get_draw_data();
-            main_win.print_at_coords(y, x, str);
+        main_win.print_at_coords(y, x, str);
     }
     std::stringstream s;
     s << "last direction: " << last_direction.x << ", " << last_direction.y;
