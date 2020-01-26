@@ -19,7 +19,7 @@ inline auto game::process_input(int input) -> int
         }
 
     case KEY_DOWN:
-        if (last_direction != direction::SOUTH) {
+        if (last_direction != direction::NORTH) {
             last_direction = direction::SOUTH;
         }
         break;
@@ -31,7 +31,7 @@ inline auto game::process_input(int input) -> int
         break;
 
     case KEY_LEFT:
-        if (last_direction != direction::WEST) {
+        if (last_direction != direction::EAST) {
             last_direction = direction::WEST;
         }
         break;
@@ -47,6 +47,7 @@ inline auto game::process_input(int input) -> int
     default:
         break;
     };
+    flushinp(); // took me forever to find this this thing!
     return input;
 }
 
@@ -111,6 +112,7 @@ auto game::game_loop() -> void
         // only get one character at a time
         input = getch();
         last_input = process_input(input);
+
         render();
         auto loop_time = duration_cast<nanoseconds>(current_time - now());
         if (last_direction == direction::NORTH || last_direction == direction::SOUTH) {
