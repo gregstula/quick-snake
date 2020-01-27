@@ -16,13 +16,15 @@ constexpr int GAME_WIDTH = 80;
 
 struct game_state {
     int score = 0;
+    coords food_position;
+    coords snake_head;
+    coords snake_direction;
 };
 
 using namespace std::chrono_literals;
 using std::chrono::nanoseconds;
 class game {
     bool is_running = true;
-    coords last_direction = direction::WEST;
 
     snake_game::snake snake = snake_game::snake({ 10, 10 }, { 10, 11 });
     snake_game::food food = snake_game::food({ 0, 0 });

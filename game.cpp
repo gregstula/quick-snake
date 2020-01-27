@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <iostream>
 #include <sstream>
+#include <random>
 #include <thread>
 
 namespace snake_game {
@@ -111,7 +112,7 @@ auto game::game_loop() -> void
         // only get one character at a time
         input = getch();
         last_input = process_input(input);
-        update();
+        update(game_state);
         render();
         auto loop_time = duration_cast<nanoseconds>(current_time - now());
         if (last_direction == direction::NORTH || last_direction == direction::SOUTH) {
@@ -143,6 +144,13 @@ auto game::render_food() -> void
 inline auto game::end_game() -> void
 {
     is_running = false;
+}
+
+auto reandom_coords()-> coords {
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> y_distribution(1,GAME_HEIGHT);
+    std::uniform_int_distribution<int> x_distribution(1,GAME_HEIGHT);
+    return { y_distribution(generator), x_distribution(generator) };
 }
 
 } // namespace snake_game
