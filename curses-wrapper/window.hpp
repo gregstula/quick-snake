@@ -17,28 +17,26 @@ struct window {
 
     ~window() { delwin(_win); }
 
-    void clear() { wclear(this->_win); }
+    void clear() { wclear(_win); }
 
-    void clear_from_cursor_to_bottom() { wclrtobot(this->_win); }
+    void clear_from_cursor_to_bottom() { wclrtobot(_win); }
 
-    void clear_from_cursor_to_eol() { wclrtoeol(this->_win); }
+    void clear_from_cursor_to_eol() { wclrtoeol(_win); }
 
-    void refresh() { wrefresh(this->_win); }
-
-    int get_key() { return wgetch(this->_win); }
+    void refresh() { wrefresh(_win); }
 
     template <class String = std::string>
     void print_at_coords(int y, int x, String&& s)
     {
         std::string str { s };
-        mvwprintw(this->_win, y, x, str.c_str());
+        mvwprintw(_win, y, x, str.c_str());
     }
 
     template <class String = std::string>
     void print_at_cursor(String&& s)
     {
         std::string str { s };
-        wprintw(this->_win, str.c_str());
+        wprintw(_win, str.c_str());
     }
 
     void print_border()

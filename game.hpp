@@ -6,9 +6,10 @@
 #include <thread>
 #include <tuple>
 #include <utility>
-
+#include "drawable.hpp"
 #include "snake.hpp"
 #include "window.hpp"
+
 namespace snake_game {
 
 constexpr int GAME_HEIGHT = 40;
@@ -17,7 +18,7 @@ constexpr int GAME_WIDTH = 80;
 struct game_state {
     int score = 0;
     coords food_position;
-    coords snake_head;
+    coords snake_position;
     coords snake_direction;
 };
 
@@ -37,7 +38,7 @@ class game {
     game_state previous_state;
 
     auto process_input(int input) -> int;
-    auto update() -> void;
+    auto update(game_state) -> void;
     void update(nanoseconds delay);
     auto render() -> void;
     auto render_snake() -> void;

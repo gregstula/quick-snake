@@ -1,39 +1,38 @@
-#include "game.hpp"
 
 #include <chrono>
 #include <cstdint>
 #include <iostream>
-#include <sstream>
 #include <random>
+#include <sstream>
 #include <thread>
+#include "game.hpp"
 
 namespace snake_game {
-bool last_move_processed = false;
 inline auto game::process_input(int input) -> int
 {
     if (input == KEY_END)
         end_game();
     switch (input) {
     case KEY_UP:
-        if (last_direction != direction::SOUTH) {
-            last_direction = direction::NORTH;
+        if (previous_state.snake_direction != direction::SOUTH) {
+            current_state.snake_direction = direction::NORTH;
         }
-
+        break;
     case KEY_DOWN:
-        if (last_direction != direction::NORTH) {
-            last_direction = direction::SOUTH;
+        if (previous_state.snake_direction != direction::NORTH) {
+            current_state.snake_direction = direction::SOUTH;
         }
         break;
 
     case KEY_RIGHT:
-        if (last_direction != direction::WEST) {
-            last_direction = direction::EAST;
+        if (previous_state.snake_direction != direction::WEST) {
+            current_state.snake_direction = direction::EAST;
         }
         break;
 
     case KEY_LEFT:
-        if (last_direction != direction::EAST) {
-            last_direction = direction::WEST;
+        if (previous_state.snake_direction != direction::EAST) {
+            current_state.snake_direction = direction::WEST;
         }
         break;
     case 43: // plus sign
@@ -52,9 +51,11 @@ inline auto game::process_input(int input) -> int
 }
 
 // All gamestate update logic goes here
-void game::update()
+void game::update(game_state)
 {
     process_movement();
+    previous_state = current_state;
+    current_state.snake_position = snake.head();
 }
 
 void game::update(std::chrono::nanoseconds delay)
@@ -65,9 +66,9 @@ void game::update(std::chrono::nanoseconds delay)
 
 auto game::process_movement() -> void
 {
-    auto&& next_position = snake.next_position(last_direction);
+    auto&& next_position = snake.next_position(current_state.snake_direction);
     if (next_position.y <= 0) {
-        // last_direction = direction::invert_direction(last_direction);
+        // current_state.snake_direction = direction::invert_direction(previous_state.snake_direction);
         snake.teleport(coords { GAME_HEIGHT, next_position.x });
         return;
     }
@@ -80,11 +81,11 @@ auto game::process_movement() -> void
         return;
     }
     else if (next_position.x >= GAME_WIDTH - 0) {
-        // last_direction = direction::invert_direction(last_direction);
+        // current_state.snake_direction = direction::invert_direction(previous_state.snake_direction);
         snake.teleport(coords { next_position.y, 0 });
         return;
     }
-    snake.move(last_direction);
+    snake.move(previous_state.snake_direction);
 }
 
 // all render logic goes here
@@ -112,11 +113,11 @@ auto game::game_loop() -> void
         // only get one character at a time
         input = getch();
         last_input = process_input(input);
-        update(game_state);
+        update(current_state);
         render();
         auto loop_time = duration_cast<nanoseconds>(current_time - now());
-        if (last_direction == direction::NORTH || last_direction == direction::SOUTH) {
-            std::this_thread::sleep_for(loop_time + game_speed * 1.75);
+        if (previous_state.snake_direction == direction::NORTH || current_state.snake_direction == direction::SOUTH) {
+            std::this_thread::sleep_for(loop_time + game_speed * 1.73);
         }
         else {
             std::this_thread::sleep_for(loop_time + game_speed);
@@ -131,7 +132,7 @@ auto game::render_snake() -> void
         main_win.print_at_coords(y, x, str);
     }
     std::stringstream s;
-    s << "last direction: " << last_direction.x << ", " << last_direction.y;
+    s << "Current Position: " << current_state.snake_direction.x << ", " << current_state.snake_direction.y;
     main_win.print_at_coords(10, 10, s.str());
 }
 
@@ -146,10 +147,11 @@ inline auto game::end_game() -> void
     is_running = false;
 }
 
-auto reandom_coords()-> coords {
+auto reandom_coords() -> coords
+{
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> y_distribution(1,GAME_HEIGHT);
-    std::uniform_int_distribution<int> x_distribution(1,GAME_HEIGHT);
+    std::uniform_int_distribution<int> y_distribution(1, GAME_HEIGHT);
+    std::uniform_int_distribution<int> x_distribution(1, GAME_HEIGHT);
     return { y_distribution(generator), x_distribution(generator) };
 }
 

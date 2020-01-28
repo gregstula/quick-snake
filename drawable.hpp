@@ -1,9 +1,8 @@
 #pragma once
-#include <memory>
+
 #include <string>
-#include <tuple>
-#include <utility>
 #include <vector>
+#include <utility>
 
 namespace snake_game {
 
@@ -26,17 +25,25 @@ struct direction {
     static auto invert_direction(coords dir) -> coords;
 };
 
-struct interface_drawable {
-    template <class Coords, class String>
-    interface_drawable(Coords&& position, String&& sprite) : _coords(std::forward<Coords>(position)),
-                                                             _sprite(std::forward<String>(sprite)) {};
+struct drawable {
+    template <class String>
+    drawable(coords position, String&& sprite) : _coords(position), _sprite(std::forward<String>(sprite)) {};
 
     auto get_draw_data() -> draw_data;
     auto get_coords() -> coords;
-    void set_coords(coords new_coords);
 
-    coords _coords { 0, 0 };
-    std::string _sprite = "";
+    coords _coords;
+    std::string _sprite;
+
+protected:
+    // this is not an abstract base class
+    ~drawable() = default;
+public:
+    // if you define one you define them all
+    drawable(const drawable&) = default;
+    drawable& operator=(const drawable&) = default;
+    drawable(drawable&&) = default;
+    drawable& operator=(drawable&&) = default;
 };
 
 } // namespace snake_game

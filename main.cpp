@@ -1,21 +1,6 @@
-#include <ncurses.h>
-
-#include <chrono>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <utility>
-
 #include "game.hpp"
-#include "interface_drawable.hpp"
 #include "screen.hpp"
-#include "snake.hpp"
 #include "window.hpp"
-
-struct game_state {
-    int score = 0;
-};
 
 int main()
 {
@@ -25,4 +10,3 @@ int main()
     return 0;
 }
 
-;

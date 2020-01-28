@@ -1,22 +1,17 @@
-#include "interface_drawable.hpp"
-namespace snake_game {
+#include "drawable.hpp"
+#include <stdexcept>
 
+namespace snake_game {
 // Return data needed for drawing
 // Coordinates and ascii representation
-auto interface_drawable::get_draw_data() -> draw_data
+auto drawable::get_draw_data() -> draw_data
 {
     return { _coords, _sprite };
 }
 
-auto interface_drawable::get_coords() -> coords
+auto drawable::get_coords() -> coords
 {
     return _coords;
-}
-
-// private setter for coordinates, mainly used for turning tail into head
-auto interface_drawable::set_coords(coords new_coords) -> void
-{
-    _coords = new_coords;
 }
 
 auto direction::invert_direction(coords dir) -> coords
@@ -36,8 +31,10 @@ auto direction::invert_direction(coords dir) -> coords
     throw std::invalid_argument("coordinates not defined in interface_drawable cannot be inverted");
 }
 
-}; /* namespace snake_game */
+} // namespace snake_game
 
+
+// Coords operator overloads
 using snake_game::coords;
 auto add_coords(coords lhs, coords rhs) -> coords
 {
