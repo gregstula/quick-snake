@@ -1,7 +1,6 @@
 #include "game.hpp"
 #include "screen.hpp"
 #include "window.hpp"
-
 int main()
 {
     auto screen = curses::screen();
