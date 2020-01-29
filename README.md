@@ -10,6 +10,7 @@ Requirments:
   - clang
 
 Intallation:
+
     git clone https://github.com/gregstula/quick-snake.git
     cd quick-snake
     make
