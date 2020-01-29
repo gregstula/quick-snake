@@ -37,8 +37,8 @@ private:
 
     frame_data previous_frame = {};
 
-    curses::window main_win = curses::window(MAP_HEIGHT + 1, MAP_WIDTH + 1, 10, 10);
-    curses::window menu_win = curses::window(12, 80, 10 + MAP_HEIGHT, 10);
+    curses::window main_win = curses::window(MAP_HEIGHT + 1, MAP_WIDTH + 1, 2, 10);
+    curses::window menu_win = curses::window(12, 80, 2 + MAP_HEIGHT, 10);
 
     snake_game::snake snake = { { 10, 10 }, { 10, 11 } };
 
