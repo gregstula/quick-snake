@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace snake_game {
 
@@ -16,28 +16,19 @@ struct draw_data {
     std::string s;
 };
 
-struct direction {
-    constexpr static coords NORTH = { -1, 0 };
-    constexpr static coords SOUTH = { 1, 0 };
-    constexpr static coords EAST = { 0, 1 };
-    constexpr static coords WEST = { 0, -1 };
-
-    static auto invert_direction(coords dir) -> coords;
-};
-
 struct drawable {
     template <class String>
-    drawable(coords position, String&& sprite) : _coords(position), _sprite(std::forward<String>(sprite)) {};
+    drawable(coords position, String&& sprite) : position(position), sprite(std::forward<String>(sprite)) {};
 
     auto get_draw_data() -> draw_data;
-    auto get_coords() -> coords;
 
-    coords _coords;
-    std::string _sprite;
+    coords position;
+    std::string sprite;
 
 protected:
     // this is not an abstract base class
     ~drawable() = default;
+
 public:
     // if you define one you define them all
     drawable(const drawable&) = default;

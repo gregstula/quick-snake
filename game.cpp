@@ -1,91 +1,92 @@
-
-#include <chrono>
-#include <cstdint>
-#include <iostream>
-#include <random>
-#include <sstream>
-#include <thread>
 #include "game.hpp"
 
 namespace snake_game {
-inline auto game::process_input(int input) -> int
+inline auto game::process_input(int input, frame_data& current_frame) -> void
 {
-    if (input == KEY_END)
+    if (input == KEY_END) {
         end_game();
+    }
+
     switch (input) {
     case KEY_UP:
-        if (previous_state.snake_direction != direction::SOUTH) {
-            current_state.snake_direction = direction::NORTH;
+        if (previous_frame.snake_direction != direction::SOUTH) {
+            current_frame.snake_direction = direction::NORTH;
         }
         break;
     case KEY_DOWN:
-        if (previous_state.snake_direction != direction::NORTH) {
-            current_state.snake_direction = direction::SOUTH;
+        if (previous_frame.snake_direction != direction::NORTH) {
+            current_frame.snake_direction = direction::SOUTH;
         }
         break;
 
     case KEY_RIGHT:
-        if (previous_state.snake_direction != direction::WEST) {
-            current_state.snake_direction = direction::EAST;
+        if (previous_frame.snake_direction != direction::WEST) {
+            current_frame.snake_direction = direction::EAST;
         }
         break;
 
     case KEY_LEFT:
-        if (previous_state.snake_direction != direction::EAST) {
-            current_state.snake_direction = direction::WEST;
+        if (previous_frame.snake_direction != direction::EAST) {
+            current_frame.snake_direction = direction::WEST;
         }
         break;
-    case 43: // plus sign
-        increment_game_speed();
-        break;
-    case 45: // minus sign
-        decrement_game_speed();
-        break;
-    case 32: // space bar
-        snake.grow();
-        break;
     default:
+        current_frame.snake_direction = previous_frame.snake_direction;
         break;
-    };
-    return input;
+    }
+
+    if (debug_mode) {
+        switch (input) {
+        case 43: // plus sign
+            increment_game_speed();
+            break;
+        case 45: // minus sign
+            decrement_game_speed();
+            break;
+        case 32: // space bar
+            snake.grow(current_frame.snake_direction);
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 // All gamestate update logic goes here
-void game::update(game_state)
+auto game::update(frame_data& current_frame) -> void
 {
-    process_movement();
-    previous_state = current_state;
-    current_state.snake_position = snake.head();
+    process_movement(current_frame);
+    save_state(current_frame);
 }
 
-void game::update(std::chrono::nanoseconds delay)
+auto game::save_state(frame_data& current_frame) -> void
 {
-    process_movement();
-    std::this_thread::sleep_for(delay);
+    previous_frame = current_frame;
 }
 
-auto game::process_movement() -> void
+auto game::process_movement(frame_data& current_frame) -> void
 {
-    auto&& next_position = snake.next_position(current_state.snake_direction);
-    if (next_position.y <= 0) {
-        // current_state.snake_direction = direction::invert_direction(previous_state.snake_direction);
-        snake.teleport(coords { GAME_HEIGHT, next_position.x });
+    auto&& [next_y, next_x] = snake.next_position(current_frame.snake_direction);
+
+    if (next_y <= 0) {
+        // current_frame.snake_direction = direction::invert_direction(previous_frame.snake_direction);
+        snake.teleport({ GAME_HEIGHT, next_x });
         return;
     }
-    else if (next_position.y >= GAME_HEIGHT) {
-        snake.teleport(coords { 0, next_position.x });
+    else if (next_y >= GAME_HEIGHT) {
+        snake.teleport({ 0, next_x });
         return;
     }
-    else if (next_position.x <= 0) {
-        snake.teleport(coords { next_position.y, GAME_WIDTH });
+    else if (next_x <= 0) {
+        snake.teleport({ next_y, GAME_WIDTH });
         return;
     }
-    else if (next_position.x >= GAME_WIDTH - 0) {
-        // current_state.snake_direction = direction::invert_direction(previous_state.snake_direction);
-        snake.teleport(coords { next_position.y, 0 });
+    else if (next_x >= GAME_WIDTH - 0) {
+        // current_frame.snake_direction = direction::invert_direction(previous_frame.snake_direction);
+        snake.teleport({ next_y, 0 });
         return;
     }
-    snake.move(previous_state.snake_direction);
+    snake.move(previous_frame.snake_direction);
 }
 
 // all render logic goes here
@@ -106,17 +107,15 @@ auto game::game_loop() -> void
     using std::chrono::duration_cast;
     using std::chrono::nanoseconds;
 
-    int input = 0;
-    int last_input = 0;
     while (is_running) {
         auto current_time = now();
+        auto current_frame = frame_data();
         // only get one character at a time
-        input = getch();
-        last_input = process_input(input);
-        update(current_state);
+        process_input(getch(), current_frame);
+        update(current_frame);
         render();
         auto loop_time = duration_cast<nanoseconds>(current_time - now());
-        if (previous_state.snake_direction == direction::NORTH || current_state.snake_direction == direction::SOUTH) {
+        if (previous_frame.snake_direction == direction::NORTH || current_frame.snake_direction == direction::SOUTH) {
             std::this_thread::sleep_for(loop_time + game_speed * 1.73);
         }
         else {
@@ -131,9 +130,6 @@ auto game::render_snake() -> void
         auto [y, x, str] = snake_part.get_draw_data();
         main_win.print_at_coords(y, x, str);
     }
-    std::stringstream s;
-    s << "Current Position: " << current_state.snake_direction.x << ", " << current_state.snake_direction.y;
-    main_win.print_at_coords(10, 10, s.str());
 }
 
 auto game::render_food() -> void
@@ -145,6 +141,20 @@ auto game::render_food() -> void
 inline auto game::end_game() -> void
 {
     is_running = false;
+}
+
+auto game::decrement_game_speed() -> void
+{
+    if (game_speed <= 100ms) {
+        game_speed += 4ms;
+    }
+}
+
+auto game::increment_game_speed() -> void
+{
+    if (game_speed >= 20ms) {
+        game_speed -= 4ms;
+    }
 }
 
 auto reandom_coords() -> coords

@@ -6,33 +6,10 @@ namespace snake_game {
 // Coordinates and ascii representation
 auto drawable::get_draw_data() -> draw_data
 {
-    return { _coords, _sprite };
-}
-
-auto drawable::get_coords() -> coords
-{
-    return _coords;
-}
-
-auto direction::invert_direction(coords dir) -> coords
-{
-    if (dir == NORTH) {
-        return SOUTH;
-    }
-    if (dir == SOUTH) {
-        return NORTH;
-    }
-    if (dir == WEST) {
-        return EAST;
-    }
-    if (dir == EAST) {
-        return WEST;
-    }
-    throw std::invalid_argument("coordinates not defined in interface_drawable cannot be inverted");
+    return { position, sprite };
 }
 
 } // namespace snake_game
-
 
 // Coords operator overloads
 using snake_game::coords;
