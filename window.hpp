@@ -27,15 +27,14 @@ struct window {
     template <class String = std::string>
     void print_at_coords(int y, int x, String&& s)
     {
-        std::string str { s };
-        mvwprintw(_win, y, x, str.c_str());
+        mvwprintw(_win, y, x, s.c_str());
     }
 
     template <class String = std::string>
     void print_at_cursor(String&& s)
     {
         std::string str { s };
-        wprintw(_win, str.c_str());
+        wprintw(_win, s.c_str());
     }
 
     void print_border()

@@ -138,7 +138,6 @@ inline auto game::process_movement(frame_data& current_frame) -> void
 auto game::render() -> void
 {
 
-    curses::refresh_guard<curses::window> menu(menu_win);
     render_menu();
     curses::refresh_guard<curses::window> game(main_win);
     render_snake();
@@ -147,6 +146,7 @@ auto game::render() -> void
 
 auto game::render_menu() -> void
 {
+    curses::refresh_guard<curses::window> menu(menu_win);
     std::stringstream ss;
     ss << "Score: " << score;
     menu_win.print_at_coords(5, 5, ss.str());
