@@ -6,7 +6,6 @@
 #include "screen.hpp"
 
 namespace curses {
-
 struct window {
     window(int height, int width, int startx, int starty)
     {
@@ -39,9 +38,10 @@ struct window {
         wprintw(_win, str.c_str());
     }
 
-    void print_border()
+    void print_border
+    (chtype left, chtype right, chtype top, chtype bottom, chtype top_left, chtype top_right, chtype bottom_left, chtype bottom_right)
     {
-        wborder(_win, '|', '|', '-', '-', '+', '+', '+', '+');
+        wborder(_win, left, right, top, bottom, top_left, top_right, bottom_left, bottom_right);
     }
 
 private:

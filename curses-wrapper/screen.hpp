@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ncurses.h>
 #include <string>
+#include <functional>
 namespace curses {
 
 // Attatch a window to this class to use
@@ -14,7 +15,6 @@ struct refresh_guard {
     inline explicit refresh_guard(screen_type& s) : screen(s)
     {
         screen.clear();
-        screen.print_border();
     }
 
     inline ~refresh_guard() { screen.refresh(); }
@@ -62,15 +62,7 @@ public:
     void clear() { ::clear(); }
     void refresh() { ::refresh(); }
 
-    bool is_active() { return _active; }
-
-    void quit() { _active = false; }
-    void print_border() {};
-
 private:
-    //	int _screen_height = 24;
-    //	int _screen_width = 80;
-    bool _active = true;
 };
 
 } // namespace curses

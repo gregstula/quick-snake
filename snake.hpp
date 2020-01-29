@@ -1,7 +1,14 @@
 #pragma once
-#include "drawable.hpp"
+#include <string>
+#include <tuple>
+#include <vector>
 
 namespace snake_game {
+
+//ncurses uses y, x
+struct coords {
+    int y, x;
+};
 
 namespace direction {
     constexpr coords NORTH = { -1, 0 };
@@ -12,12 +19,22 @@ namespace direction {
     auto invert_direction(coords dir) -> coords;
 }
 
-struct snake_part : drawable {
-    snake_part(coords position) : drawable(position, "@") {};
+template <class Drawable>
+auto get_draw_data(Drawable d) -> std::tuple<int, int, std::string>
+{
+    return { d.position.y, d.position.x, d.sprite };
+}
+
+struct snake_part {
+    snake_part(coords c) : position(c) {};
+    coords position;
+    std::string sprite = "■";
 };
 
-struct food : drawable {
-    food(coords position) : drawable(position, "♥") {};
+struct food_part {
+    food_part(coords c) : position(c) {};
+    coords position;
+    std::string sprite = "♥";
 };
 
 struct snake {
@@ -43,4 +60,10 @@ struct snake {
 private:
     std::vector<snake_part> snake_body;
 };
-} // namespace snake_game
+}
+
+// basic coordinate operator overloads
+auto add_coords(snake_game::coords lhs, snake_game::coords rhs) -> snake_game::coords;
+auto operator+(snake_game::coords lhs, snake_game::coords rhs) -> snake_game::coords;
+auto operator==(snake_game::coords lhs, snake_game::coords rhs) -> bool;
+auto operator!=(snake_game::coords lhs, snake_game::coords rhs) -> bool; // namespace snake_game

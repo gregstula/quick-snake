@@ -2,6 +2,38 @@
 #include <stdexcept>
 
 namespace snake_game {
+
+auto game::game_loop() -> void
+{
+    using namespace std::chrono;
+    using namespace std::this_thread;
+
+    while (is_running) {
+        auto frame_start_time = high_resolution_clock::now();
+        auto current_frame = frame_data();
+        // only get one character at a time
+        process_input(getch(), current_frame);
+        update(current_frame);
+        render();
+        if (previous_frame.snake_direction == direction::NORTH || current_frame.snake_direction == direction::SOUTH) {
+            sleep_for((frame_start_time + frame_speed * 1.75) - high_resolution_clock::now());
+        }
+        else {
+            sleep_for(frame_start_time + frame_speed - high_resolution_clock::now());
+        }
+    }
+
+    if (user_lost) {
+        {
+            curses::refresh_guard<curses::window> auto_refresh(main_win);
+            std::stringstream ss;
+            ss << "YOU LOST! Your Score: " << score;
+            main_win.print_at_coords(MAP_HEIGHT / 2, MAP_WIDTH / 2, ss.str());
+        }
+        sleep_for(3s);
+    }
+}
+
 inline auto game::process_input(int input, frame_data& current_frame) -> void
 {
     if (input == KEY_END) {
@@ -55,7 +87,20 @@ inline auto game::process_input(int input, frame_data& current_frame) -> void
 // All gamestate update logic goes here
 auto game::update(frame_data& current_frame) -> void
 {
-    process_movement(current_frame);
+    auto&& [next_y, next_x] = snake.head();
+
+    if ((next_y == 0) || (next_y == MAP_HEIGHT)) {
+        user_lost = true;
+        end_game();
+        return;
+    }
+    if ((next_x == 0) || (next_x == MAP_WIDTH )) {
+        user_lost = true;
+        end_game();
+        return;
+    }
+
+    snake.move(current_frame.snake_direction);
 
     if (snake.head() == food.position) {
         food_eaten = true;
@@ -64,7 +109,8 @@ auto game::update(frame_data& current_frame) -> void
 
     for (auto part = std::begin(snake.body()) + 1; part != std::end(snake.body()); part++) {
         if (part->position == snake.head()) {
-            throw std::runtime_error("YOU LOSE");
+            user_lost = true;
+            end_game();
         }
     }
 
@@ -81,29 +127,8 @@ inline auto game::save_state(frame_data& current_frame) -> void
     previous_frame = current_frame;
 }
 
-auto game::process_movement(frame_data& current_frame) -> void
+inline auto game::process_movement(frame_data& current_frame) -> void
 {
-    auto&& [next_y, next_x] = snake.next_position(current_frame.snake_direction);
-
-    if (next_y <= 0) {
-        // current_frame.snake_direction = direction::invert_direction(previous_frame.snake_direction);
-        snake.teleport({ GAME_HEIGHT, next_x });
-        return;
-    }
-    else if (next_y >= GAME_HEIGHT) {
-        snake.teleport({ 0, next_x });
-        return;
-    }
-    else if (next_x <= 0) {
-        snake.teleport({ next_y, GAME_WIDTH });
-        return;
-    }
-    else if (next_x >= GAME_WIDTH - 0) {
-        // current_frame.snake_direction = direction::invert_direction(previous_frame.snake_direction);
-        snake.teleport({ next_y, 0 });
-        return;
-    }
-    snake.move(current_frame.snake_direction);
 }
 
 // all render logic goes here
@@ -112,47 +137,20 @@ auto game::render() -> void
     curses::refresh_guard<curses::window> auto_refresh(main_win);
     render_snake();
     render_food();
-}
-
-// Get's the current time
-auto now() -> std::chrono::time_point<std::chrono::high_resolution_clock>
-{
-    return std::chrono::high_resolution_clock::now();
-}
-
-auto game::game_loop() -> void
-{
-    using std::chrono::duration_cast;
-    using std::chrono::nanoseconds;
-
-    while (is_running) {
-        auto current_time = now();
-        auto current_frame = frame_data();
-        // only get one character at a time
-        process_input(getch(), current_frame);
-        update(current_frame);
-        render();
-        auto loop_time = duration_cast<nanoseconds>(current_time - now());
-        if (previous_frame.snake_direction == direction::NORTH || current_frame.snake_direction == direction::SOUTH) {
-            std::this_thread::sleep_for(loop_time + game_speed * 1.73);
-        }
-        else {
-            std::this_thread::sleep_for(loop_time + game_speed);
-        }
-    }
+    main_win.print_border('|', '|', '-', '-', '+', '+', '+', '+');
 }
 
 inline auto game::render_snake() -> void
 {
-    for (auto&& snake_part : snake.body()) {
-        auto [y, x, str] = snake_part.get_draw_data();
+    for (auto&& part : snake.body()) {
+        auto [y, x, str] = get_draw_data(part);
         main_win.print_at_coords(y, x, str);
     }
 }
 
 inline auto game::render_food() -> void
 {
-    auto [y, x, str] = food.get_draw_data();
+    auto [y, x, str] = get_draw_data(food);
     main_win.print_at_coords(y, x, str);
 }
 
@@ -161,29 +159,31 @@ inline auto game::end_game() -> void
     is_running = false;
 }
 
+using namespace std::literals::chrono_literals;
+// counter intuitive to increment in a decrement function, but easier for caller
 inline auto game::decrement_game_speed() -> void
 {
-    if (game_speed <= 100ms) {
-        game_speed += 4ms;
+    if (frame_speed <= 100ms) {
+        frame_speed += 4ms;
     }
 }
 
 inline auto game::increment_game_speed() -> void
 {
-    if (game_speed >= 20ms) {
-        game_speed -= 4ms;
+    if (frame_speed >= 20ms) {
+        frame_speed -= 4ms;
     }
 }
 
-std::random_device rd;
-std::mt19937 rng(rd());
-
 auto random_coords() -> coords
 {
-    std::uniform_int_distribution<uint> y_distribution(1, snake_game::GAME_HEIGHT);
+    thread_local static std::random_device rd;
+    thread_local static std::mt19937 rng(rd());
+
+    std::uniform_int_distribution<uint> y_distribution(1, MAP_HEIGHT - 1);
     int y = y_distribution(rng);
 
-    std::uniform_int_distribution<uint> x_distribution(1, snake_game::GAME_WIDTH);
+    std::uniform_int_distribution<uint> x_distribution(1, MAP_WIDTH - 1);
     int x = x_distribution(rng);
     return { y, x };
 }
