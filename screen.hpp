@@ -1,9 +1,9 @@
 #pragma once
 
+#include <functional>
 #include <iostream>
 #include <ncurses.h>
 #include <string>
-#include <functional>
 namespace curses {
 
 // Attatch a window to this class to use
@@ -15,6 +15,7 @@ struct refresh_guard {
     inline explicit refresh_guard(screen_type& s) : screen(s)
     {
         screen.clear();
+        screen.print_border();
     }
 
     inline ~refresh_guard() { screen.refresh(); }

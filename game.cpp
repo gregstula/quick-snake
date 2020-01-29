@@ -25,10 +25,10 @@ auto game::game_loop() -> void
 
     if (user_lost) {
         {
-            curses::refresh_guard<curses::window> auto_refresh(main_win);
+            curses::refresh_guard<curses::window> auto_refresh(menu_win);
             std::stringstream ss;
             ss << "YOU LOST! Your Score: " << score;
-            main_win.print_at_coords(MAP_HEIGHT / 2, MAP_WIDTH / 2, ss.str());
+            menu_win.print_at_coords(5, 5, ss.str());
         }
         sleep_for(3s);
     }
@@ -39,6 +39,9 @@ inline auto game::process_input(int input, frame_data& current_frame) -> void
     if (input == KEY_END) {
         end_game();
     }
+
+    current_frame.snake_direction = previous_frame.snake_direction;
+
     switch (input) {
     case KEY_UP:
         if (previous_frame.snake_direction != direction::SOUTH) {
@@ -63,7 +66,6 @@ inline auto game::process_input(int input, frame_data& current_frame) -> void
         }
         break;
     default:
-        current_frame.snake_direction = previous_frame.snake_direction;
         break;
     }
 
@@ -94,7 +96,7 @@ auto game::update(frame_data& current_frame) -> void
         end_game();
         return;
     }
-    if ((next_x == 0) || (next_x == MAP_WIDTH )) {
+    if ((next_x == 0) || (next_x == MAP_WIDTH)) {
         user_lost = true;
         end_game();
         return;
@@ -110,6 +112,7 @@ auto game::update(frame_data& current_frame) -> void
     for (auto part = std::begin(snake.body()) + 1; part != std::end(snake.body()); part++) {
         if (part->position == snake.head()) {
             user_lost = true;
+            render();
             end_game();
         }
     }
@@ -134,13 +137,22 @@ inline auto game::process_movement(frame_data& current_frame) -> void
 // all render logic goes here
 auto game::render() -> void
 {
-    curses::refresh_guard<curses::window> auto_refresh(main_win);
+
+    curses::refresh_guard<curses::window> menu(menu_win);
+    render_menu();
+    curses::refresh_guard<curses::window> game(main_win);
     render_snake();
     render_food();
-    main_win.print_border('|', '|', '-', '-', '+', '+', '+', '+');
 }
 
-inline auto game::render_snake() -> void
+auto game::render_menu() -> void
+{
+    std::stringstream ss;
+    ss << "Score: " << score;
+    menu_win.print_at_coords(5, 5, ss.str());
+}
+
+auto game::render_snake() -> void
 {
     for (auto&& part : snake.body()) {
         auto [y, x, str] = get_draw_data(part);
@@ -148,13 +160,13 @@ inline auto game::render_snake() -> void
     }
 }
 
-inline auto game::render_food() -> void
+auto game::render_food() -> void
 {
     auto [y, x, str] = get_draw_data(food);
     main_win.print_at_coords(y, x, str);
 }
 
-inline auto game::end_game() -> void
+auto game::end_game() -> void
 {
     is_running = false;
 }
