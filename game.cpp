@@ -92,6 +92,7 @@ auto game::update(frame_data& current_frame) -> void
 {
     auto&& [curr_y, curr_x] = snake.head();
 
+    // Did we collide with wall?
     if ((curr_y == 0) || (curr_y == MAP_HEIGHT)) {
         user_lost = true;
         end_game();
@@ -103,17 +104,22 @@ auto game::update(frame_data& current_frame) -> void
         return;
     }
 
+    // Will we eat?
     auto next_head = snake.next_position(current_frame.snake_direction);
     if (next_head == food.position) {
         food_eaten = true;
         snake.grow(current_frame.snake_direction);
     }
 
+
     // Always grow before move
     snake.move(current_frame.snake_direction);
 
-    for (auto part = std::begin(snake.body()) + 1; part != std::end(snake.body()); part++) {
-        if (part->position == snake.head()) {
+    //Did we collide with tail?
+    bool head = true;
+    for (auto&& part : snake.body()) {
+        if (head) { head = false; continue; }
+        if (part.position == snake.head()) {
             user_lost = true;
             render();
             end_game();
