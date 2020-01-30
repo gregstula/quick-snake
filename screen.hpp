@@ -44,21 +44,25 @@ public:
         //        }
     }
 
-    ~screen() noexcept { endwin(); }
+    ~screen() noexcept
+    {
+        clear();
+        endwin();
+    }
 
     int get_key() noexcept { return getch(); }
 
     template <typename S>
     void print_at_coords(int y, int x, S&& str)
     {
-        std::string s{std::forward<S>(str)};
+        std::string s { std::forward<S>(str) };
         mvprintw(y, x, s.c_str());
     }
 
     template <typename S>
     void print_at_cursor(S&& str)
     {
-        std::string s{std::forward<S>(str)};
+        std::string s { std::forward<S>(str) };
         printw(s.c_str());
     }
 

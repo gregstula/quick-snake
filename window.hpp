@@ -15,7 +15,8 @@ struct window {
 
     window() noexcept { _win = nullptr; }
 
-    ~window() noexcept {
+    ~window() noexcept
+    {
         wclear(_win);
         wrefresh(_win);
         delwin(_win);

@@ -6,7 +6,7 @@ using namespace std::literals::chrono_literals;
 using namespace std::chrono;
 using namespace std::this_thread;
 
-auto game::game_loop() -> void
+auto game::game_loop() -> uint64_t
 {
     while (is_running) {
         auto frame_start_time = high_resolution_clock::now();
@@ -31,8 +31,9 @@ auto game::game_loop() -> void
             ss << "YOU LOST! Your Score: " << score;
             menu_win.print_at_coords(2, 2, ss.str());
         }
-        sleep_for(3s);
+        sleep_for(900ms);
     }
+    return score;
 }
 
 inline auto game::process_input(int input, frame_data& current_frame) -> void
@@ -111,14 +112,16 @@ auto game::update(frame_data& current_frame) -> void
         snake.grow(current_frame.snake_direction);
     }
 
-
     // Always grow before move
     snake.move(current_frame.snake_direction);
 
     //Did we collide with tail?
     bool head = true;
     for (auto&& part : snake.body()) {
-        if (head) { head = false; continue; }
+        if (head) {
+            head = false;
+            continue;
+        }
         if (part.position == snake.head()) {
             user_lost = true;
             render();

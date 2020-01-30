@@ -20,7 +20,7 @@ struct frame_data {
 };
 
 struct game {
-    auto game_loop() -> void;
+    auto game_loop() -> uint64_t;
     auto end_game() -> void;
     bool debug_mode = false;
 
@@ -37,6 +37,7 @@ private:
 
     frame_data previous_frame = {};
 
+    std::string game_mode = {};
     curses::window main_win = curses::window(MAP_HEIGHT + 1, MAP_WIDTH + 1, 1, 1);
     curses::window menu_win = curses::window(5, 80, 2 + MAP_HEIGHT, 1);
 
