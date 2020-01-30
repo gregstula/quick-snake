@@ -39,7 +39,7 @@ private:
 
     std::string game_mode = {};
     curses::window main_win = curses::window(MAP_HEIGHT + 1, MAP_WIDTH + 1, 1, 1);
-    curses::window menu_win = curses::window(5, 80, 2 + MAP_HEIGHT, 1);
+    curses::window menu_win = curses::window(5, 80, 1 + MAP_HEIGHT, 1);
 
     snake_game::snake snake = { { 10, 10 }, { 10, 11 } };
 

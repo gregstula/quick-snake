@@ -4,15 +4,17 @@ A fast paced terminal snake-like game written in C++17
 ![Fast paced to test your skills](https://github.com/gregstula/quick-snake/blob/master/images/qsnake.gif)
 
 # Installing #
-This otherwise pure C++ program uses a bit of ncurses for displayig characters. While I was tempted to use ASCII terminal codes directly for extra portability, it didn't seem worth the effort so ncurses is required. 
+This otherwise pure C++ program uses a bit of ncurses for displayig characters. While I was tempted to use ASCII terminal codes directly for extra portability, it didn't seem worth the effort so ncurses is required.
 
-On macOS I beleive you can install ncurses and llvm(clang) with [homebrew](https://brew.sh/) on Linux you just need a C++ compiler.
+On a fresh macOS Catalina I was able to build and test with the default clang you get after being prompted to install developer tools when you type `git` in the default terminal. Otherwise, you can install clang with [homebrew](https://brew.sh/).
+
+On Linux I tested with clang++ and g++ in Konsole and Gnome Terminal. For older terminals like xterm I had to enable unicode support.
 
 Requirments:
   - a UTF-8 Terminal
   - ncurses
   - clang or gcc
-  
+
 *Note: Your Clang or GCC version needs to support the -std=c++17 flag*
 
 **Intallation** (clang):
@@ -23,7 +25,7 @@ Requirments:
     ./qsnake
 
 **Intallation** (gcc):
-    
+
     git clone https://github.com/gregstula/quick-snake.git
     cd quick-snake
     make gcc
@@ -41,7 +43,7 @@ A long time ago, I played a facebook game called Snake '08. It was a realy fast 
   - the game should feel as if `ls` ran a quick snake session
 - Self Contained
   - the game only writes to stdout, no files are used or created
-  
+
 ### Non-Goals ###
   - Arcade style start menu
   - touching ~/.local or ~/.config for useless writes about a snake game
