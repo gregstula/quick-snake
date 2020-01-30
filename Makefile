@@ -4,7 +4,7 @@ LIBS= -lncurses
 SRC=main.cpp snake.cpp game.cpp
 
 all:
-	$(CC) $(CFLAGS) $(LIBS) -o snake $(SRC)
+	$(CC) $(CFLAGS) $(LIBS) -o qsnake $(SRC)
 clean:
 	@rm -f snake
 	@rm -f *.o
