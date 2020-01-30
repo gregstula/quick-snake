@@ -61,4 +61,20 @@ This game is challenging off the bat. It has one difficulty mode: Hard. If you l
 In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are more spaced than columns. The nature of ASCII character ratios sometimes makes this difficult to notice. Instead of dealing with this issue with ASCII optical illusions, I used unicode square characters to make the nature of terminal coordinates explicit. Then, I simply normalized the vertical travel speed. The result is smooth controls and a natural accordian effect.
 
 
+# License #
 
+
+    Copyright (C) 2020  Gregory D. Stula
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
