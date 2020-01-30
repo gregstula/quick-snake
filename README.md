@@ -7,7 +7,7 @@ A fast paced terminal snake-like game written in C++17
 ## Design Goals ##
 - Challenging
 - Emphasize skill over novelty
-- Emphasise quick play session
+- Emphasize quick play session
 - Minimal
   - can easily exist in your $PATH
   - the game should feel as if `ls` ran a quick snake session
