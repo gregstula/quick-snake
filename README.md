@@ -31,7 +31,7 @@ In every text based sake game I've tried vertical movement is faster than horizo
 # Installing #
 This otherwise pure C++ program uses a bit of ncurses for displayig characters. While I was tempted to use ASCII terminal codes directly for extra portability, it didn't seem worth the effort so ncurses is required. 
 
-On macOS I beleive you can install ncurses and llvm(clang) with [homebrew](/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)) on Linux you just need a C++ compiler.
+On macOS I beleive you can install ncurses and llvm(clang) with [homebrew](https://brew.sh/) on Linux you just need a C++ compiler.
 
 Requirments:
   - a UTF-8 Terminal
