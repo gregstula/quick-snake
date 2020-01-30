@@ -36,7 +36,6 @@ import ycm_core
 flags = [
     '-x',
     'c++',
-    '-I./curses-wrapper/',
     '-Wall',
     '-std=c++17',
 ]
