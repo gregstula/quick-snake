@@ -12,7 +12,7 @@ template <class Screen>
 struct refresh_guard {
     typedef Screen screen_type;
 
-    inline explicit refresh_guard(screen_type& s) : screen(s)
+    inline explicit refresh_guard(screen_type& s) noexcept : screen(s)
     {
         screen.clear();
         screen.print_border();
@@ -28,7 +28,7 @@ private:
 
 class screen {
 public:
-    screen()
+    screen() noexcept
     {
         setlocale(LC_ALL, "en_US.UTF-8");
         initscr();
@@ -44,24 +44,27 @@ public:
         //        }
     }
 
-    ~screen() { endwin(); }
+    ~screen() noexcept { endwin(); }
 
-    int get_key() { return getch(); }
+    int get_key() noexcept { return getch(); }
 
-    template <typename S = std::string>
+    template <typename S>
     void print_at_coords(int y, int x, S&& str)
     {
-        mvprintw(y, x, str.c_str());
+        std::string s{std::forward<S>(str)};
+        mvprintw(y, x, s.c_str());
     }
 
-    template <typename S = std::string>
+    template <typename S>
     void print_at_cursor(S&& str)
     {
-        printw(str.c_str());
+        std::string s{std::forward<S>(str)};
+        printw(s.c_str());
     }
 
-    void clear() { ::clear(); }
-    void refresh() { ::refresh(); }
+    void print_border() noexcept {}
+    void clear() noexcept { ::clear(); }
+    void refresh() noexcept { ::refresh(); }
 
 private:
 };

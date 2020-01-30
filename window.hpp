@@ -7,38 +7,43 @@
 
 namespace curses {
 struct window {
-    window(int height, int width, int startx, int starty)
+    window(int height, int width, int startx, int starty) noexcept
     {
         _win = newwin(height, width, startx, starty);
         curs_set(0);
     }
 
-    window() { _win = nullptr; }
+    window() noexcept { _win = nullptr; }
 
-    ~window() { delwin(_win); }
+    ~window() noexcept {
+        wclear(_win);
+        wrefresh(_win);
+        delwin(_win);
+    }
 
-    void clear() { werase(_win); }
+    void clear() noexcept { werase(_win); }
 
-    void clear_from_cursor_to_bottom() { wclrtobot(_win); }
+    void clear_from_cursor_to_bottom() noexcept { wclrtobot(_win); }
 
-    void clear_from_cursor_to_eol() { wclrtoeol(_win); }
+    void clear_from_cursor_to_eol() noexcept { wclrtoeol(_win); }
 
-    void refresh() { wrefresh(_win); }
+    void refresh() noexcept { wrefresh(_win); }
 
-    template <class String = std::string>
-    void print_at_coords(int y, int x, String&& s)
+    template <class S>
+    void print_at_coords(int y, int x, S&& str)
     {
+        std::string s { std::forward<S>(str) };
         mvwprintw(_win, y, x, s.c_str());
     }
 
-    template <class String = std::string>
-    void print_at_cursor(String&& s)
+    template <class S>
+    void print_at_cursor(S&& str)
     {
-        std::string str { s };
+        std::string s { std::forward<S>(str) };
         wprintw(_win, s.c_str());
     }
 
-    void print_border()
+    void print_border() noexcept
     {
         wborder(_win, '|', '|', '-', '-', '+', '+', '+', '+');
     }
