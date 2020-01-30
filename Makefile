@@ -1,11 +1,10 @@
-CC = clang++
-CFLAGS = -x c++ -Wall -stdlib=libc++ -std=c++17
-LIBS= -lncurses -pthreads
-LDFLAFS=-use-ld=/usr/bin/lld
+CC=clang++
+CFLAGS = -x c++ -O2 -std=c++17
+LIBS= -lncurses
 SRC=main.cpp snake.cpp game.cpp
 
 all:
-	$(CC) $(CFLAGS) $(LDFLAFS) $(LIBS) -o snake $(SRC)
+	$(CC) $(CFLAGS) $(LIBS) -o snake $(SRC)
 clean:
 	@rm -f snake
 	@rm -f *.o

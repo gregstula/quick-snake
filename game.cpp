@@ -2,12 +2,12 @@
 #include <stdexcept>
 
 namespace snake_game {
+using namespace std::literals::chrono_literals;
+using namespace std::chrono;
+using namespace std::this_thread;
 
 auto game::game_loop() -> void
 {
-    using namespace std::chrono;
-    using namespace std::this_thread;
-
     while (is_running) {
         auto frame_start_time = high_resolution_clock::now();
         auto current_frame = frame_data();
@@ -28,7 +28,7 @@ auto game::game_loop() -> void
             curses::refresh_guard<curses::window> auto_refresh(menu_win);
             std::stringstream ss;
             ss << "YOU LOST! Your Score: " << score;
-            menu_win.print_at_coords(5, 5, ss.str());
+            menu_win.print_at_coords(2, 2, ss.str());
         }
         sleep_for(3s);
     }
@@ -102,12 +102,13 @@ auto game::update(frame_data& current_frame) -> void
         return;
     }
 
-    snake.move(current_frame.snake_direction);
-
-    if (snake.head() == food.position) {
+    auto next_head = snake.next_position(current_frame.snake_direction);
+    if (next_head == food.position) {
         food_eaten = true;
         snake.grow(current_frame.snake_direction);
     }
+
+    snake.move(current_frame.snake_direction);
 
     for (auto part = std::begin(snake.body()) + 1; part != std::end(snake.body()); part++) {
         if (part->position == snake.head()) {
@@ -140,8 +141,15 @@ auto game::render() -> void
 
     render_menu();
     curses::refresh_guard<curses::window> game(main_win);
-    render_snake();
-    render_food();
+    // render food
+    auto [y, x, str] = get_draw_data(food);
+    main_win.print_at_coords(y, x, str);
+
+    // render snake
+    for (auto&& part : snake.body()) {
+        auto [y, x, str] = get_draw_data(part);
+        main_win.print_at_coords(y, x, str);
+    }
 }
 
 auto game::render_menu() -> void
@@ -149,21 +157,7 @@ auto game::render_menu() -> void
     curses::refresh_guard<curses::window> menu(menu_win);
     std::stringstream ss;
     ss << "Score: " << score;
-    menu_win.print_at_coords(5, 5, ss.str());
-}
-
-auto game::render_snake() -> void
-{
-    for (auto&& part : snake.body()) {
-        auto [y, x, str] = get_draw_data(part);
-        main_win.print_at_coords(y, x, str);
-    }
-}
-
-auto game::render_food() -> void
-{
-    auto [y, x, str] = get_draw_data(food);
-    main_win.print_at_coords(y, x, str);
+    menu_win.print_at_coords(2, 2, ss.str());
 }
 
 auto game::end_game() -> void
@@ -171,7 +165,6 @@ auto game::end_game() -> void
     is_running = false;
 }
 
-using namespace std::literals::chrono_literals;
 // counter intuitive to increment in a decrement function, but easier for caller
 inline auto game::decrement_game_speed() -> void
 {
@@ -192,10 +185,10 @@ auto random_coords() -> coords
     thread_local static std::random_device rd;
     thread_local static std::mt19937 rng(rd());
 
-    std::uniform_int_distribution<uint> y_distribution(1, MAP_HEIGHT - 1);
+    thread_local static std::uniform_int_distribution<uint> y_distribution(1, MAP_HEIGHT - 1);
     int y = y_distribution(rng);
 
-    std::uniform_int_distribution<uint> x_distribution(1, MAP_WIDTH - 1);
+    thread_local static std::uniform_int_distribution<uint> x_distribution(1, MAP_WIDTH - 1);
     int x = x_distribution(rng);
     return { y, x };
 }

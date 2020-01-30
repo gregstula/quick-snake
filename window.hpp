@@ -10,13 +10,14 @@ struct window {
     window(int height, int width, int startx, int starty)
     {
         _win = newwin(height, width, startx, starty);
+        curs_set(0);
     }
 
     window() { _win = nullptr; }
 
     ~window() { delwin(_win); }
 
-    void clear() { wclear(_win); }
+    void clear() { werase(_win); }
 
     void clear_from_cursor_to_bottom() { wclrtobot(_win); }
 
