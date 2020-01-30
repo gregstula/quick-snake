@@ -11,10 +11,11 @@ auto game::game_loop() -> void
     while (is_running) {
         auto frame_start_time = high_resolution_clock::now();
         auto current_frame = frame_data();
-        // only get one character at a time
+        // get input from stdscr
         process_input(getch(), current_frame);
         update(current_frame);
         render();
+        // normalize vertical travel speed which is naturally faster due to line to col size ratio
         if (previous_frame.snake_direction == direction::NORTH || current_frame.snake_direction == direction::SOUTH) {
             sleep_for((frame_start_time + frame_speed * 1.75) - high_resolution_clock::now());
         }
