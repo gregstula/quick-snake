@@ -17,7 +17,7 @@ A fast paced terminal snake-like game written in C++17
 A long time ago, I played a facebook game called Snake '08. It was a realy fast snake game where high scores were difficult to get and you rarely got to the point where your tail length matter, and once you did you felt like you had reached the end game portion. It was fairly addicting and my go to distraction when I used that site. While I haven't played that game in years I wanted to capture the quick and fun distracition it offered
 
 ## Warning! This game is kind of addicting ##
-The fast pace and small initial tail size puts emphasis on control and reaction time. The game quits when you lose, so as to not be a bigger commitment than using `cat` However, you may find that there is a strong temptation to press Up and Enter in your terminal and try again!
+The fast pace and small initial tail size puts emphasis on control and reaction time. The game quits when you lose, so as to not be a bigger commitment than using `cat`. However, you may find that there is a strong temptation to press Up and Enter in your terminal and try again!
 
 ## This is not your typical snake game ##
 Other snake games tend to emphasize over tail growth and long play sessions. To be frank, most ncurses snake games out there are pretty boring. BSD Worm, for example, is less of a game and more of novelty. Why are the controls inconsistent? What is the challenge? Slow snake games try to get you to play for a long time but it takes a long time to get to the point where any skill is required.
