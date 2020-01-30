@@ -1,6 +1,5 @@
 -x
 c++
 -I
--I./curses-wrapper/
 -Wall
 -std=c++17
