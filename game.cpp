@@ -90,14 +90,14 @@ inline auto game::process_input(int input, frame_data& current_frame) -> void
 // All gamestate update logic goes here
 auto game::update(frame_data& current_frame) -> void
 {
-    auto&& [next_y, next_x] = snake.head();
+    auto&& [curr_y, curr_x] = snake.head();
 
-    if ((next_y == 0) || (next_y == MAP_HEIGHT)) {
+    if ((curr_y == 0) || (curr_y == MAP_HEIGHT)) {
         user_lost = true;
         end_game();
         return;
     }
-    if ((next_x == 0) || (next_x == MAP_WIDTH)) {
+    if ((curr_x == 0) || (curr_x == MAP_WIDTH)) {
         user_lost = true;
         end_game();
         return;
@@ -109,6 +109,7 @@ auto game::update(frame_data& current_frame) -> void
         snake.grow(current_frame.snake_direction);
     }
 
+    // Always grow before move
     snake.move(current_frame.snake_direction);
 
     for (auto part = std::begin(snake.body()) + 1; part != std::end(snake.body()); part++) {
@@ -166,7 +167,7 @@ auto game::end_game() -> void
     is_running = false;
 }
 
-// counter intuitive to increment in a decrement function, but easier for caller
+// counter intuitively increment in a decrement function
 inline auto game::decrement_game_speed() -> void
 {
     if (frame_speed <= 100ms) {
