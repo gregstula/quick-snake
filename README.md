@@ -26,7 +26,7 @@ Other snake games tend to emphasize over tail growth and long play sessions. To 
 This game is challenging off the bat. It has one difficulty mode: Hard. If you lose you're back to your shell prompt.
 
 ### Vertical movement vs Hortizontal movemnt ###
-In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are much more spaced than columns. The nature of ASCII character ratios sometimes makes this difficult to notice. Instead of dealing with this issue with a huge map and ASCII optical illusions, I used unicode square characters to make the nature of terminal coordinates explicit. Then, I simply normalized the vertical travel speed. The result is smooth controls and a nice accordian effect which feels very natural.
+In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are more spaced than columns. The nature of ASCII character ratios sometimes makes this difficult to notice. Instead of dealing with this issue with a huge map and ASCII optical illusions, I used unicode square characters to make the nature of terminal coordinates explicit. Then, I simply normalized the vertical travel speed. The result is smooth controls and a natural accordian effect.
 
 # Installing #
 This otherwise pure C++ program uses a bit of ncurses for displayig characters. While I was tempted to use ASCII terminal codes directly for extra portability, it didn't seem worth the effort so ncurses is required. 
