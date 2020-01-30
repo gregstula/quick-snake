@@ -4,8 +4,11 @@ A fast paced terminal snake-like game written in C++17
 ![Fast paced to test your skills](https://github.com/gregstula/quick-snake/blob/master/images/qsnake.gif)
 
 
-## Design Goals ##
-- Challenging
+## Design ##
+A long time ago, I played a facebook game called Snake '08. It was a realy fast snake game where high scores were difficult to get and you rarely got to the point where your tail length mattered, and once you did you felt like you had reached the "end game". It was fairly addicting and my go to distraction when I used that site. While I haven't played that game in years I wanted to capture the quick and fun distracition it offered
+
+### Goals ###
+- Challenging gameplay
 - Emphasize skill over novelty
 - Emphasize quick play session
 - Minimal
@@ -13,8 +16,12 @@ A fast paced terminal snake-like game written in C++17
   - the game should feel as if `ls` ran a quick snake session
 - Self Contained
   - the game only writes to stdout, no files are used or created
-
-A long time ago, I played a facebook game called Snake '08. It was a realy fast snake game where high scores were difficult to get and you rarely got to the point where your tail length mattered, and once you did you felt like you had reached the "end game". It was fairly addicting and my go to distraction when I used that site. While I haven't played that game in years I wanted to capture the quick and fun distracition it offered
+  
+### Non-Goals ###
+  - Arcade style start menu
+  - touching ~/.local or ~/.config for useless writes about a snake game
+  - color
+  - non-UTF terminal support
 
 ## Warning! This game is kind of addicting ##
 The fast pace and small initial tail size puts emphasis on control and reaction time. The game quits when you lose, so as to not be a bigger commitment than using `cat`. However, you may find that there is a strong temptation to press Up and Enter in your terminal and try again!
