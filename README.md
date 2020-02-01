@@ -4,14 +4,17 @@ A fast paced terminal snake-like game written in C++17
 ![Fast paced to test your skills](https://github.com/gregstula/quick-snake/blob/master/images/qsnake.gif)
 
 # Installing #
-This otherwise pure C++ program uses a bit of ncurses for displayig characters. While I was tempted to use ASCII terminal codes directly for extra portability, it didn't seem worth the effort so ncurses is required.
+This otherwise pure C++ program uses a bit of ncurses for displayig characters. While I was tempted to try using ASCII terminal codes directly for building the TUI, it didn't seem worth the effort so ncurses is required.
+
+I developed the project in Void Linux with clang and tested it on Yakuake and Konsole. For xterm I had to enable unicode support with `XTerm.vt100.locale: true`
 
 On a fresh macOS Catalina I was able to build and test with the default clang you get after being prompted to install developer tools when you type `git` in the default terminal. Otherwise, you can install clang with [homebrew](https://brew.sh/).
+While the defautl macOS terminal worked great, iTerm's out of the box configuration had suboptimal line spacing.
 
-On Linux I tested with clang++ and g++ in Konsole and Gnome Terminal. For older terminals like xterm I had to enable unicode support.
 
 Requirments:
   - a UTF-8 Terminal
+  - UTF glyph friendly font like Noto Mono or Consolas
   - ncurses
   - clang or gcc
 
@@ -48,7 +51,7 @@ A long time ago, I played a facebook game called Snake '08. It was a realy fast 
   - Arcade style start menu
   - touching ~/.local or ~/.config for useless writes about a snake game
   - color
-  - non-UTF terminal support
+  - non-UTF terminal or font configurations
 
 ## Warning! This game is kind of addicting ##
 The fast pace and small initial tail size puts emphasis on control and reaction time. The game quits when you lose, so as to not be a bigger commitment than using `cat`. However, you may find that there is a strong temptation to press Up and Enter in your terminal and try again!
@@ -60,7 +63,7 @@ Other snake games tend to emphasize over tail growth and long play sessions. To 
 This game is challenging off the bat. It has one difficulty mode: Hard. If you lose you're back to your shell prompt.
 
 ### Vertical movement vs Hortizontal movemnt ###
-In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are more spaced than columns. The nature of ASCII character ratios sometimes makes this difficult to notice. Instead of dealing with this issue with ASCII optical illusions, I used unicode square characters to make the nature of terminal coordinates explicit. Then, I simply normalized the vertical travel speed. The result is smooth controls and a natural accordian effect.
+In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are more spaced than columns. This problem is especially difficult because line spacing can be changed in most terminal emulators. I decided to use unicode square characters to make the nature of terminal coordinates explicit and to create a nice according effect. Then, I simply normalized the vertical travel speed so that it was proportiantate to the default terminal line spacing. The result is smooth controls on most terminal emulators.
 
 
 # License #
