@@ -19,10 +19,10 @@ struct frame_data {
 
 struct game {
     game(int map_maxy, int map_maxx) {
-        Map_Height = map_maxy;
+        Map_Height = map_maxy + 2;
         Map_Width = map_maxx;
-        main_win = std::make_unique<curses::window>(map_maxy + 1, map_maxx + 1, 1, 1);
-        menu_win = std::make_unique<curses::window>(5, map_maxx, map_maxy + 1, 1);
+        main_win = std::make_unique<curses::window>(Map_Height + 1, Map_Width + 1, 1, 1);
+        menu_win = std::make_unique<curses::window>(5, Map_Width + 1, Map_Height + 1, 1);
     }
 
     auto game_loop() -> uint64_t;

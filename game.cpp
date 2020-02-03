@@ -6,10 +6,6 @@ using namespace std::literals::chrono_literals;
 using namespace std::chrono;
 using namespace std::this_thread;
 
-auto timer = high_resolution_clock::now();
-std::chrono::duration<double,std::milli> duration;
-int64_t frame_count = 0;
-
 auto game::game_loop() -> uint64_t
 {
     while (is_running) {
@@ -21,7 +17,7 @@ auto game::game_loop() -> uint64_t
         render();
         // normalize vertical travel speed which is naturally faster due to line to col size ratio
         if (previous_frame.snake_direction == direction::NORTH || current_frame.snake_direction == direction::SOUTH) {
-            sleep_for((frame_start_time + frame_speed * 2.032) - high_resolution_clock::now());
+            sleep_for((frame_start_time + frame_speed * 2.0) - high_resolution_clock::now());
         }
         else {
             sleep_for(frame_start_time + frame_speed - high_resolution_clock::now());
@@ -40,12 +36,6 @@ auto game::game_loop() -> uint64_t
     return score;
 }
 
-void reset_timer() {
-    timer = high_resolution_clock::now();
-    frame_count = 0;
-    duration = std::chrono::milliseconds::zero();
-
-}
 inline void game::process_input(int input, frame_data& current_frame)
 {
     if (input == KEY_END) {
@@ -58,27 +48,23 @@ inline void game::process_input(int input, frame_data& current_frame)
     case KEY_UP:
         if (previous_frame.snake_direction != direction::SOUTH) {
             current_frame.snake_direction = direction::NORTH;
-            reset_timer();
        }
         break;
     case KEY_DOWN:
         if (previous_frame.snake_direction != direction::NORTH) {
             current_frame.snake_direction = direction::SOUTH;
-            reset_timer();
         }
         break;
 
     case KEY_RIGHT:
         if (previous_frame.snake_direction != direction::WEST) {
             current_frame.snake_direction = direction::EAST;
-            reset_timer();
         }
         break;
 
     case KEY_LEFT:
         if (previous_frame.snake_direction != direction::EAST) {
             current_frame.snake_direction = direction::WEST;
-            reset_timer();
         }
         break;
     default:
@@ -167,17 +153,13 @@ void game::render()
         main_win->print_at_coords(y, x, str);
         // render food
     }
-     duration = high_resolution_clock::now() - timer;
-     frame_count++;
-     //auto avg = std::to_string(duration.count()/frame_count);
-     auto dstr = std::to_string(duration.count());
      auto [fy, fx, fstr] = get_draw_data(food);
-     main_win->print_at_coords(fy, fx, dstr);
+     main_win->print_at_coords(fy, fx, fstr);
 }
 
 void game::render_menu()
 {
-    curses::refresh_guard<curses::window> refresh(*main_win);
+    curses::refresh_guard<curses::window> refresh(*menu_win);
     std::stringstream ss;
     ss << "Score: " << score;
     menu_win->print_at_coords(2, 2, ss.str());
