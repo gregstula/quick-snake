@@ -38,6 +38,7 @@ public:
         meta(stdscr, TRUE);
         nodelay(stdscr, TRUE); // let getch pass through
         curs_set(0);
+        typeahead(-1);
     }
 
     ~screen() noexcept

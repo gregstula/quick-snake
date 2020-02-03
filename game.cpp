@@ -17,7 +17,7 @@ auto game::game_loop() -> uint64_t
         render();
         // normalize vertical travel speed which is naturally faster due to line to col size ratio
         if (previous_frame.snake_direction == direction::NORTH || current_frame.snake_direction == direction::SOUTH) {
-            sleep_for((frame_start_time + frame_speed * 1.75) - high_resolution_clock::now());
+            sleep_for((frame_start_time + frame_speed * 2) - high_resolution_clock::now());
         }
         else {
             sleep_for(frame_start_time + frame_speed - high_resolution_clock::now());
@@ -146,17 +146,16 @@ inline void game::save_state(frame_data& current_frame)
 void game::render()
 {
 
-    render_menu();
-    curses::refresh_guard<curses::window> game(main_win);
-    // render food
-    auto [y, x, str] = get_draw_data(food);
-    main_win.print_at_coords(y, x, str);
-
+//    render_menu();
     // render snake
+    curses::refresh_guard<curses::window> game(main_win);
     for (auto&& part : snake.body()) {
         auto [y, x, str] = get_draw_data(part);
         main_win.print_at_coords(y, x, str);
+        // render food
     }
+     auto [fy, fx, fstr] = get_draw_data(food);
+     main_win.print_at_coords(fy, fx, fstr);
 }
 
 void game::render_menu()

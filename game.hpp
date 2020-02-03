@@ -32,8 +32,8 @@ private:
     // initial placement increases score
     int64_t score = -1;
 
-    // 1 frame at 60 fps = 16 ms
-    std::chrono::nanoseconds frame_speed = std::chrono::milliseconds(16);
+    // 1 frame at 60 fps = 16.6 ms
+    std::chrono::nanoseconds frame_speed{16600000};
 
     frame_data previous_frame = {};
 

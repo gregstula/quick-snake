@@ -8,7 +8,7 @@ void snake::grow(coords direction)
 {
     // there was a bug where move and grow caused
     // weird 0,0 lose tail for a frame so we pop tail now
-    auto new_tail = snake_body.back().position + direction;
+    auto new_tail = (std::end(snake_body) - 1)->position + direction;
     snake_body.emplace_back(new_tail);
 }
 
@@ -22,14 +22,14 @@ auto snake::body() -> std::vector<snake_part>
 
 auto snake::head() -> coords
 {
-    return snake_body.at(0).position;
+    return std::begin(snake_body)->position;
 }
 
 // calcutates the next position
 auto snake::next_position(coords direction) -> coords
 {
     // get coords for next head
-    auto new_coords = snake_body.at(0).position + direction;
+    auto new_coords = std::begin(snake_body)->position + direction;
     return new_coords;
 }
 
@@ -38,7 +38,7 @@ void snake::move(coords direction)
     // pop the tail, key to snake-like movement
     snake_body.pop_back();
     // get coords for next head
-    auto new_coords = next_position(direction);
+    auto new_coords = std::begin(snake_body)->position + direction;
     // create new head at first position
     snake_body.emplace(std::begin(snake_body), new_coords);
 }
