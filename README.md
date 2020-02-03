@@ -51,19 +51,24 @@ A long time ago, I played a facebook game called Snake '08. It was a realy fast 
   - Arcade style start menu
   - touching ~/.local or ~/.config for useless writes about a snake game
   - color
-  - non-UTF terminal or font configurations
+  - non-UTF capable terminals
 
 ## Warning! This game is kind of addicting ##
 The fast pace and small initial tail size puts emphasis on control and reaction time. The game quits when you lose, so as to not be a bigger commitment than using `cat`. However, you may find that there is a strong temptation to press Up and Enter in your terminal and try again!
 
 ## This is not your typical snake game ##
-Other snake games tend to emphasize over tail growth and long play sessions. To be frank, most ncurses snake games out there are pretty boring. BSD Worm, for example, is less of a game and more of novelty. Why are the controls inconsistent? What is the challenge? Slow snake games try to get you to play for a long time but it takes a long time to get to the point where any skill is required.
+Snake games follow a similar pattern but most are slow paced. This game is isnpired by snake but it has it's own rules
+and vision. The vertical movements are marked by an accordion effect, a natural consququence of terminal dimensions I
+decided to embrase. The food can appear "under the snakes belly" and that's ok. You can only lose by crashing into
+yourself and the walls.
 
 ### Difficulty ###
 This game is challenging off the bat. It has one difficulty mode: Hard. If you lose you're back to your shell prompt.
+The standard map is 80x40 but if the game detects your screen is too small it will try to shrink
+accordingly.
 
 ### Vertical movement vs Hortizontal movemnt ###
-In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are more spaced than columns. This problem is especially difficult because line spacing can be changed in most terminal emulators. I decided to use unicode square characters to make the nature of terminal coordinates explicit and to create a nice according effect. Then, I simply normalized the vertical travel speed so that it was proportiantate to the default terminal line spacing. The result is smooth controls on most terminal emulators.
+In every text based sake game I've tried vertical movement is faster than horizontal movement. This is because lines in a terminal are more spaced than columns. This problem is especially difficult because line spacing can be changed in most terminal emulators. I decided to use unicode square characters to make the nature of terminal coordinates explicit and to create a nice accordion effect. Then, I simply normalized the vertical travel speed so that it was proportiantate to the map dimensions. The result is smooth controls that feel very natural.
 
 
 # License #

@@ -27,7 +27,7 @@ int main(int argc, char** argv)
         curses::refresh_guard<curses::screen> refresh(screen);
         auto&& [y,x] = get_max_y_x();
 
-        // game is meant for 80x40 but we will still
+        // standard game is 80x40 but we will still
         // try to get ok dimensions on smaller screens with small fonts etc
         int dimx = 80;
         if (x <= 80) {
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
         }
 
         int dimy = dimx/2;
-        while (dimy > y) {
+        while (dimy > y - 6) { // account for score menu size
             dimx -= 2;
             dimy = dimx/2;
         }
