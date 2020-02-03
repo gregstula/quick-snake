@@ -4,7 +4,7 @@
 namespace snake_game {
 
 // simply grow from tail pointer if possible
-auto snake::grow(coords direction) -> void
+void snake::grow(coords direction)
 {
     // there was a bug where move and grow caused
     // weird 0,0 lose tail for a frame so we pop tail now
@@ -33,7 +33,7 @@ auto snake::next_position(coords direction) -> coords
     return new_coords;
 }
 
-auto snake::move(coords direction) -> void
+void snake::move(coords direction)
 {
     // pop the tail, key to snake-like movement
     snake_body.pop_back();
@@ -45,7 +45,7 @@ auto snake::move(coords direction) -> void
 
 // Teleports the head of the snake to a given position without caring about
 // cardinal directions
-auto snake::teleport(coords next_point) -> void
+void snake::teleport(coords next_point)
 {
     // similar to move
     snake_body.pop_back();

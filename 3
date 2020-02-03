@@ -89,7 +89,7 @@ inline void game::process_input(int input, frame_data& current_frame)
 }
 
 // All gamestate update logic goes here
-inline void game::update(frame_data& current_frame)
+void game::update(frame_data& current_frame)
 {
     auto&& [curr_y, curr_x] = snake.head();
 
@@ -142,8 +142,12 @@ inline void game::save_state(frame_data& current_frame)
     previous_frame = current_frame;
 }
 
+inline void game::process_movement(frame_data& current_frame)
+{
+}
+
 // all render logic goes here
-void game::render()
+auto game::render() -> void
 {
 
     render_menu();
@@ -159,7 +163,7 @@ void game::render()
     }
 }
 
-void game::render_menu()
+auto game::render_menu() -> void
 {
     curses::refresh_guard<curses::window> menu(menu_win);
     std::stringstream ss;
@@ -167,20 +171,20 @@ void game::render_menu()
     menu_win.print_at_coords(2, 2, ss.str());
 }
 
-inline void game::end_game()
+auto game::end_game() -> void
 {
     is_running = false;
 }
 
 // counter intuitively increment in a decrement function
-inline void game::decrement_game_speed()
+inline auto game::decrement_game_speed() -> void
 {
     if (frame_speed <= 100ms) {
         frame_speed += 4ms;
     }
 }
 
-inline void game::increment_game_speed()
+inline auto game::increment_game_speed() -> void
 {
     if (frame_speed >= 20ms) {
         frame_speed -= 4ms;

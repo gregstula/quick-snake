@@ -45,17 +45,17 @@ struct snake {
 
     // increases snake body by one part
     // growth is opposite of current direction
-    auto grow(coords direction) -> void;
+    void grow(coords direction);
 
     // moves snake head to current pos + direction
-    auto move(coords direction) -> void;
+    void move(coords direction);
 
     // calcutates the next position
     auto next_position(coords direction) -> coords;
 
     // Teleports the head of the snake to a given position without caring about
     // cardinal directions
-    auto teleport(coords next_point) -> void;
+    void teleport(coords next_point);
 
 private:
     std::vector<snake_part> snake_body;

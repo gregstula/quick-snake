@@ -14,17 +14,18 @@ int main(int argc, char** argv)
         }
     }
 
+    uint64_t score = 0;
     try {
         auto screen = curses::screen();
         curses::refresh_guard<curses::screen> refresh(screen);
-
         auto game = snake_game::game();
-        game.debug_mode = true;
-        game.game_loop();
-        return 0;
+        score = game.game_loop();
     }
     catch (std::exception& err) {
         std::cerr << err.what() << std::endl;
         return -1;
     }
+
+    std::cout << "Score: " << score << std::endl;
+    return 0;
 }

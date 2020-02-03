@@ -21,7 +21,7 @@ struct frame_data {
 
 struct game {
     auto game_loop() -> uint64_t;
-    auto end_game() -> void;
+    void end_game();
     bool debug_mode = false;
 
 private:
@@ -45,18 +45,17 @@ private:
 
     snake_game::food_part food = { { 0, 0 } };
 
-    auto process_input(int input, frame_data& current_frame) -> void;
-    auto update(frame_data& current_frame) -> void;
+    void process_input(int input, frame_data& current_frame);
+    void update(frame_data& current_frame);
 
-    auto process_movement(frame_data& current_frame) -> void;
-    auto save_state(frame_data& current_frame) -> void;
+    void save_state(frame_data& current_frame);
 
-    auto render() -> void;
-    auto render_menu() -> void;
+    void render();
+    void render_menu();
 
     // for debuging and develop mode
-    auto decrement_game_speed() -> void;
-    auto increment_game_speed() -> void;
+    void decrement_game_speed();
+    void increment_game_speed();
 };
 
 // misc
