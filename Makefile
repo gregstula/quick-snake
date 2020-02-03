@@ -1,5 +1,5 @@
 CXX=clang++
-CXXFLAGS=-Wall -Werror -std=c++17
+CXXFLAGS=-Wall -std=c++17
 LIBS=-lncurses
 SRC=main.cpp snake.cpp game.cpp
 

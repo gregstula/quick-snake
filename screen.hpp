@@ -4,26 +4,28 @@
 #include <iostream>
 #include <ncurses.h>
 #include <string>
+#include <memory>
+
 namespace curses {
 
 // Attatch a window to this class to use
 // RAII to refresh an ncurses screen automatically when it falls out of scopt
-template <class Screen>
+template <class S>
 struct refresh_guard {
-    typedef Screen screen_type;
+    typedef S screen_type;
 
-    inline explicit refresh_guard(screen_type& s) noexcept : screen(s)
+    inline explicit refresh_guard(std::unique_ptr<screen_type>& s) noexcept : screen(s)
     {
-        screen.clear();
-        screen.print_border();
+        screen->clear();
+        screen->print_border();
     }
 
-    inline ~refresh_guard() { screen.refresh(); }
+    inline ~refresh_guard() { screen->refresh(); }
     refresh_guard& operator=(refresh_guard const&) = delete;
     refresh_guard(refresh_guard const&) = delete;
 
 private:
-    screen_type& screen;
+    std::unique_ptr<screen_type>& screen;
 };
 
 class screen {
