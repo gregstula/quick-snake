@@ -8,7 +8,7 @@ void snake::grow(coords direction)
 {
     // there was a bug where move and grow caused
     // weird 0,0 lose tail for a frame so we pop tail now
-    auto new_tail = snake_body.at(snake_body.size() - 1).position + direction;
+    auto new_tail = snake_body.back().position + direction;
     snake_body.emplace_back(new_tail);
 }
 
@@ -67,7 +67,7 @@ auto direction::invert_direction(coords dir) -> coords
     if (dir == EAST) {
         return WEST;
     }
-    throw std::invalid_argument("coordinates not defined in interface_drawable cannot be inverted");
+    throw std::invalid_argument("coordinates not defined in snake_game::direction cannot be inverted");
 }
 } // namespace snake_game
 
