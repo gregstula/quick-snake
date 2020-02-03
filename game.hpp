@@ -42,8 +42,9 @@ private:
 
     int Map_Height = 0;
     int Map_Width = 0;
-    std::unique_ptr<curses::window> main_win;
-    std::unique_ptr<curses::window> menu_win;
+
+    std::unique_ptr<curses::window> main_win = nullptr;
+    std::unique_ptr<curses::window> menu_win = nullptr;
 
     frame_data previous_frame = {};
 

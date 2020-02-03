@@ -14,18 +14,18 @@ template <class S>
 struct refresh_guard {
     typedef S screen_type;
 
-    inline explicit refresh_guard(std::unique_ptr<screen_type>& s) noexcept : screen(s)
+    inline explicit refresh_guard(screen_type& s) noexcept : screen(s)
     {
-        screen->clear();
-        screen->print_border();
+        screen.clear();
+        screen.print_border();
     }
 
-    inline ~refresh_guard() { screen->refresh(); }
+    inline ~refresh_guard() { screen.refresh(); }
     refresh_guard& operator=(refresh_guard const&) = delete;
     refresh_guard(refresh_guard const&) = delete;
 
 private:
-    std::unique_ptr<screen_type>& screen;
+    screen_type& screen;
 };
 
 class screen {

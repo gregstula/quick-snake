@@ -24,13 +24,25 @@ int main(int argc, char** argv)
     uint64_t score = 0;
     try {
         auto screen = curses::screen();
-        screen.clear();
+        curses::refresh_guard<curses::screen> refresh(screen);
         auto&& [y,x] = get_max_y_x();
-        int dimx = x/3;
-        int dimy = y/1.75;
-        auto game = snake_game::game(34,80);
+
+        // game is meant for 80x40 but we will still
+        // try to get ok dimensions on smaller screens with small fonts etc
+        int dimx = 80;
+        if (x <= 80) {
+            dimx = x - (80 - x);
+            if (dimx % 2 != 0) dimx--;
+        }
+
+        int dimy = dimx/2;
+        while (dimy > y) {
+            dimx -= 2;
+            dimy = dimx/2;
+        }
+
+        auto game = snake_game::game(dimy,dimx);
         score = game.game_loop();
-        screen.refresh();
     }
     catch (std::exception& err) {
         std::cerr << err.what() << std::endl;

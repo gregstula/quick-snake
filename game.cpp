@@ -26,7 +26,7 @@ auto game::game_loop() -> uint64_t
 
     if (user_lost) {
         {
-            curses::refresh_guard<curses::window> auto_refresh(menu_win);
+            curses::refresh_guard<curses::window> auto_refresh(*menu_win);
             std::stringstream ss;
             ss << "YOU LOST! Your Score: " << score;
             menu_win->print_at_coords(2, 2, ss.str());
@@ -148,23 +148,22 @@ void game::render()
 
     render_menu();
     // render snake
-    curses::refresh_guard<curses::window> game(main_win);
+    curses::refresh_guard<curses::window> refresh(*main_win);
     for (auto&& part : snake.body()) {
         auto [y, x, str] = get_draw_data(part);
-        main_win.print_at_coords(y, x, str);
+        main_win->print_at_coords(y, x, str);
         // render food
     }
      auto [fy, fx, fstr] = get_draw_data(food);
-     main_win.print_at_coords(fy, fx, fstr);
+     main_win->print_at_coords(fy, fx, fstr);
 }
 
 void game::render_menu()
 {
-    menu_win->clear();
+    curses::refresh_guard<curses::window> refresh(*main_win);
     std::stringstream ss;
     ss << "Score: " << score;
     menu_win->print_at_coords(2, 2, ss.str());
-    menu_win->refresh();
 }
 
 inline void game::end_game()
