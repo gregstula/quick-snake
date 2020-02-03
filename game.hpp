@@ -12,8 +12,8 @@
 #include <utility>
 
 namespace snake_game {
-constexpr int MAP_WIDTH = 79;
-constexpr int MAP_HEIGHT = 33;
+constexpr int Map_Width = 79;
+constexpr int Map_Height = 33;
 
 struct frame_data {
     coords snake_direction = direction::EAST;
@@ -38,8 +38,8 @@ private:
     frame_data previous_frame = {};
 
     std::string game_mode = {};
-    curses::window main_win = curses::window(MAP_HEIGHT + 1, MAP_WIDTH + 1, 1, 1);
-    curses::window menu_win = curses::window(5, 80, 1 + MAP_HEIGHT, 1);
+    curses::window main_win = curses::window(Map_Height + 1, Map_Width + 1, 1, 1);
+    curses::window menu_win = curses::window(5, 80, 1 + Map_Height, 1);
 
     snake_game::snake snake = { { 10, 10 }, { 10, 11 } };
 

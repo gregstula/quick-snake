@@ -94,12 +94,12 @@ inline void game::update(frame_data& current_frame)
     auto&& [curr_y, curr_x] = snake.head();
 
     // Did we collide with wall?
-    if ((curr_y == 0) || (curr_y == MAP_HEIGHT)) {
+    if ((curr_y == 0) || (curr_y == Map_Height)) {
         user_lost = true;
         end_game();
         return;
     }
-    if ((curr_x == 0) || (curr_x == MAP_WIDTH)) {
+    if ((curr_x == 0) || (curr_x == Map_Width)) {
         user_lost = true;
         end_game();
         return;
@@ -192,10 +192,10 @@ auto random_coords() -> coords
     thread_local static std::random_device rd;
     thread_local static std::mt19937 rng(rd());
 
-    thread_local static std::uniform_int_distribution<uint> y_distribution(1, MAP_HEIGHT - 1);
+    thread_local static std::uniform_int_distribution<uint> y_distribution(1, Map_Height - 1);
     int y = y_distribution(rng);
 
-    thread_local static std::uniform_int_distribution<uint> x_distribution(1, MAP_WIDTH - 1);
+    thread_local static std::uniform_int_distribution<uint> x_distribution(1, Map_Width - 1);
     int x = x_distribution(rng);
     return { y, x };
 }

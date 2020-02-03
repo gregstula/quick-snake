@@ -38,10 +38,6 @@ public:
         meta(stdscr, TRUE);
         nodelay(stdscr, TRUE); // let getch pass through
         curs_set(0);
-        // typeahead(-1);
-        //        if (has_colors()) {
-        //            start_color();
-        //        }
     }
 
     ~screen() noexcept
@@ -50,7 +46,7 @@ public:
         endwin();
     }
 
-    int get_key() noexcept { return getch(); }
+    auto get_key() -> int { return getch(); }
 
     template <typename S>
     void print_at_coords(int y, int x, S&& str)
