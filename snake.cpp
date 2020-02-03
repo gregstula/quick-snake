@@ -6,8 +6,6 @@ namespace snake_game {
 // simply grow from tail pointer if possible
 void snake::grow(coords direction)
 {
-    // there was a bug where move and grow caused
-    // weird 0,0 lose tail for a frame so we pop tail now
     auto new_tail = (std::end(snake_body) - 1)->position + direction;
     snake_body.emplace_back(new_tail);
 }

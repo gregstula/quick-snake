@@ -29,7 +29,7 @@ auto game::game_loop() -> uint64_t
             curses::refresh_guard<curses::window> auto_refresh(menu_win);
             std::stringstream ss;
             ss << "YOU LOST! Your Score: " << score;
-            menu_win.print_at_coords(2, 2, ss.str());
+            menu_win->print_at_coords(2, 2, ss.str());
         }
         sleep_for(900ms);
     }
@@ -146,7 +146,7 @@ inline void game::save_state(frame_data& current_frame)
 void game::render()
 {
 
-//    render_menu();
+    render_menu();
     // render snake
     curses::refresh_guard<curses::window> game(main_win);
     for (auto&& part : snake.body()) {
@@ -160,10 +160,11 @@ void game::render()
 
 void game::render_menu()
 {
-    curses::refresh_guard<curses::window> menu(menu_win);
+    menu_win->clear();
     std::stringstream ss;
     ss << "Score: " << score;
-    menu_win.print_at_coords(2, 2, ss.str());
+    menu_win->print_at_coords(2, 2, ss.str());
+    menu_win->refresh();
 }
 
 inline void game::end_game()
@@ -186,7 +187,7 @@ inline void game::increment_game_speed()
     }
 }
 
-auto random_coords() -> coords
+auto game::random_coords() -> coords
 {
     thread_local static std::random_device rd;
     thread_local static std::mt19937 rng(rd());
