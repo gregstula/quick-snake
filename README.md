@@ -14,7 +14,7 @@ While the defautl macOS terminal worked great, iTerm's out of the box configurat
 
 Requirments:
   - a UTF-8 Terminal
-  - UTF glyph friendly font like Noto Mono or Consolas
+  - UTF friendly font like Noto Mono or Consolas
   - ncurses
   - clang or gcc
 
