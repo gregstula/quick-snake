@@ -56,7 +56,7 @@ A long time ago, I played a facebook game called Snake '08. It was a realy fast 
 ## Warning! This game is kind of addicting ##
 The fast pace and small initial tail size puts emphasis on control and reaction time. The game quits when you lose, so as to not be a bigger commitment than using `cat`. However, you may find that there is a strong temptation to press Up and Enter in your terminal and try again!
 
-## This is not your typical snake game ##
+## This is not a typical snake game ##
 Snake games follow a similar pattern but most are slow paced. This game is isnpired by snake but it has it's own rules
 and vision. The vertical movements are marked by an accordion effect, a natural consququence of terminal dimensions I
 decided to embrase. The food can appear "under the snakes belly" and that's ok. You can only lose by crashing into
