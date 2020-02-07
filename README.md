@@ -9,7 +9,7 @@ This otherwise pure C++ program uses a bit of ncurses for displayig characters. 
 I developed the project in Void Linux with clang and tested it on Yakuake and Konsole. For xterm I had to enable unicode support with `XTerm.vt100.locale: true`
 
 On a fresh macOS Catalina I was able to build and test with the default clang you get after being prompted to install developer tools when you type `git` in the default terminal. Otherwise, you can install clang with [homebrew](https://brew.sh/).
-While the defautl macOS terminal worked great, iTerm's out of the box configuration had suboptimal line spacing.
+While the defautl macOS terminal worked great
 
 
 Requirments:
