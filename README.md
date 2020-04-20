@@ -33,6 +33,8 @@ Requirments:
     cd quick-snake
     make gcc
     ./qsnake
+    
+Note: Gentoo users should have the `unicode` USE flag set globally and use `make gentoo` so that ncursesw properly links on your system.
 
 ## Design ##
 A long time ago, I played a facebook game called Snake '08. It was a realy fast snake game where high scores were difficult to get and you rarely got to the point where your tail length mattered, and once you did you felt like you had reached the "end game". It was fairly addicting and my go to distraction when I used that site. While I haven't played that game in years I wanted to capture the quick and fun distracition it offered
